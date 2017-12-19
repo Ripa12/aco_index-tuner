@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ACO_IndexTuner" />
+        <module name="ACO_Index-Tuner" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ACO_IndexTuner" target="1.5" />
+      <module name="ACO_Index-Tuner" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

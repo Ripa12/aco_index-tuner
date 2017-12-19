@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ACO_IndexTuner.iml" filepath="$PROJECT_DIR$/ACO_IndexTuner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ACO_Index-Tuner.iml" filepath="$PROJECT_DIR$/ACO_Index-Tuner.iml" />
     </modules>
   </component>
 </project>
