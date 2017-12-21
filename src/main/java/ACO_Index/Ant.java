@@ -1,11 +1,15 @@
 package ACO_Index;
 
+import java.util.LinkedList;
 import java.util.stream.IntStream;
 
 /**
  * Created by Richard on 2017-12-18.
  */
 public class Ant {
+
+    LinkedList<LinkedList<String>> solution;
+
 
 //    graph = generateRandomMatrix(noOfCities);
 //    numberOfCities = graph.length;
