@@ -22,7 +22,7 @@ public class Graph {
         this.nodes = nodes;
 
         // Debugging
-        debugString(transactionMatrix);
+        //debugString(transactionMatrix);
     }
 
     public static Graph buildGraph(String filename, int nrOfAttributes, long nrOfTransactions) {
