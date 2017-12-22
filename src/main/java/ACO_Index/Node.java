@@ -16,14 +16,11 @@ public class Node {
 
     private BitSet transactions;
     private String attribute;
-    private int supportCount;
+    private long supportCount;
 
     private float pheromone;
 
-    private Boolean skip;
-
     public Node(BitSet transactions, String attribute) {
-        this.skip = false;
         this.pheromone = 1;
         this.transactions = transactions;
         this.attribute = attribute;
@@ -31,14 +28,6 @@ public class Node {
         supportCount = transactions.cardinality();
 
         neighbours = new ArrayList<>(); // ToDo: Possible to Reserve Memory?
-    }
-
-    public void setSkip() {
-        skip = true;
-    }
-
-    public void resetSkip() {
-        skip = false;
     }
 
     private void unblockEdges(){
@@ -60,7 +49,7 @@ public class Node {
         return attribute;
     }
 
-    public int getSupportCount() {
+    public long getSupportCount() {
         return supportCount;
     }
 
@@ -90,16 +79,14 @@ public class Node {
         return clone.cardinality();
     }
 
-    public Map.Entry<Node, Boolean> getNextItem(int minsup, BitSet bitset) {
+    public Map.Entry<Node, Boolean> getNextItem(long minsup, BitSet bitset) {
 
         Map.Entry<Node, Boolean> result = null;
 
-        int maxValue = minsup; // ToDo: Should be minsup
+        long maxValue = minsup; // ToDo: Should be minsup
         for (Map.Entry<Node, Boolean> tempNode : neighbours) {
-            //if (!tempNode.getKey().skip) {
             if (tempNode.getValue()) {
                 int tempValue = getItemSetFrequency((BitSet) bitset.clone(), tempNode.getKey().transactions);
-
                 if (tempValue >= maxValue) {
                     maxValue = tempValue;
                     result = tempNode;
@@ -116,12 +103,12 @@ public class Node {
         return result;
     }
 
-    public void generateFrequentItemsets(int minsup, LinkedList<String> itemset, LinkedList<LinkedList<String>> itemsets) {
+    public void generateFrequentItemsets(long minsup, LinkedList<String> itemset, LinkedList<LinkedList<String>> itemsets) {
         itemset.add(attribute);
         for (Map.Entry<Node, Boolean> neighbour : neighbours) {
             //boolean isLeaf = true;
             LinkedList<String> newSet = (LinkedList<String>) itemset.clone();
-            int tempValue = getItemSetFrequency(neighbour.getKey().transactions);
+            long tempValue = getItemSetFrequency(neighbour.getKey().transactions);
             if (minsup <= tempValue) {
                 //isLeaf = false;
                 itemsets.add(newSet);

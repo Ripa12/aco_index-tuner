@@ -14,9 +14,6 @@ import java.util.stream.Stream;
  * Created by Richard on 2017-12-18.
  */
 public class Graph {
-    //final static int NR_OF_ATTRIBUTES = 5; // ToDo: Read this value dynamically from file
-    //final static int NR_OF_TRANSACTIONS = 5; // ToDo: Read this value dynamically from file
-
     private Map<String, BitSet> transactionMatrix;
     private ArrayList<Node> nodes;
 
@@ -24,10 +21,11 @@ public class Graph {
         this.transactionMatrix = transactionMatrix;
         this.nodes = nodes;
 
+        // Debugging
         debugString(transactionMatrix);
     }
 
-    public static Graph buildGraph(String filename, int nrOfAttributes, int nrOfTransactions) {
+    public static Graph buildGraph(String filename, int nrOfAttributes, long nrOfTransactions) {
         Map<String, BitSet> transactionMatrix = new HashMap<>();
 
         String path = String.valueOf(ClassLoader.getSystemClassLoader().getResource(filename).getPath());
@@ -37,7 +35,7 @@ public class Graph {
 
         try (Stream<String> stream = Files.lines(Paths.get(path))) {
             stream.forEach(new Consumer<String>() {
-                short entry = 0;
+                long entry = 1;
 
                 public void accept(String trans) {
                     try {
@@ -54,12 +52,12 @@ public class Graph {
         return new Graph(transactionMatrix, generateConnections(transactionMatrix, nrOfAttributes));
     }
 
-    private static void processTransaction(String transaction, short entry, Map<String, BitSet> transactionMatrix, int nrOfTransactions) {
+    private static void processTransaction(String transaction, long entry, Map<String, BitSet> transactionMatrix, long nrOfTransactions) {
         Arrays.stream(transaction.split("\\s+"))
                 .forEach(attr -> {
                     if (!transactionMatrix.containsKey(attr))
-                        transactionMatrix.put(attr, new BitSet(nrOfTransactions));
-                    transactionMatrix.get(attr).set(entry);
+                        transactionMatrix.put(attr, new BitSet((int)nrOfTransactions));
+                    transactionMatrix.get(attr).set((int)entry);
                 });
     }
 
@@ -72,7 +70,6 @@ public class Graph {
         int index = 0;
         while (itFirst.hasNext()) {
             Map.Entry firstPair = (Map.Entry) itFirst.next();
-            //itFirst.remove(); // avoids a ConcurrentModificationException
             Node newNode = new Node((BitSet) firstPair.getValue(), (String) firstPair.getKey());
 
             int reverseIndex = index - 1;
@@ -94,13 +91,8 @@ public class Graph {
         }
     }
 
-    private void resetSkip(){
-        for (Node node : nodes) {
-            node.resetSkip();
-        }
-    }
 
-    public void debugFrequentItemSets(int minsup) {
+    public void debugFrequentItemSets(long minsup) {
         LinkedList<LinkedList<String>> itemsets = new LinkedList<>();
 
         for (Node node: nodes) {
@@ -111,7 +103,7 @@ public class Graph {
                 Map.Entry<Node, Boolean> currentNode = new AbstractMap.SimpleEntry<>(node, true);
                 Map.Entry<Node, Boolean> lastEdge;
 
-                BitSet supportCount = (BitSet) currentNode.getKey().getTransactions().clone();
+                BitSet supportCount = currentNode.getKey().getTransactionsClone();
 
                 boolean itemsetComplete = false;
                 while (!itemsetComplete) {
@@ -130,13 +122,17 @@ public class Graph {
                     itemsets.add(itemset);
                 }
                 else{
-                    itemset.add(node.getAttribute());
-                    itemsets.add(itemset);
+                    if(node.getSupportCount() >= minsup) {
+                        itemset.add(node.getAttribute());
+                        itemsets.add(itemset);
+                    }
                     itemsetsComplete = true;
                 }
             }
             //resetSkip();
         }
+        // Debugging
+        //itemsets.forEach(set -> System.out.print(set.toString()));
         itemsets.forEach(set -> System.out.println(set.toString()));
     }
 
