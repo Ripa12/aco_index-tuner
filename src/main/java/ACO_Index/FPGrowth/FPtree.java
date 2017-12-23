@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package ACO_Index.AnotherFPGrowth;
+package ACO_Index.FPGrowth;
 
 import java.util.Vector;
 

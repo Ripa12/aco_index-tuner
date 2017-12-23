@@ -4,9 +4,9 @@ import org.apache.commons.lang3.SystemUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -14,15 +14,17 @@ import java.util.stream.Stream;
  * Created by Richard on 2017-12-18.
  */
 public class Graph {
-    private Map<String, BitSet> transactionMatrix;
     private ArrayList<Node> nodes;
 
-    private Graph(Map<String, BitSet> transactionMatrix, ArrayList<Node> nodes) {
-        this.transactionMatrix = transactionMatrix;
+    private Graph(ArrayList<Node> nodes) {
         this.nodes = nodes;
 
         // Debugging
         //debugString(transactionMatrix);
+    }
+
+    public Node getRandomNode(){
+        return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size() + 1));
     }
 
     public static Graph buildGraph(String filename, int nrOfAttributes, long nrOfTransactions) {
@@ -49,7 +51,7 @@ public class Graph {
             e.printStackTrace();
         }
 
-        return new Graph(transactionMatrix, generateConnections(transactionMatrix, nrOfAttributes));
+        return new Graph(generateConnections(transactionMatrix, nrOfAttributes));
     }
 
     private static void processTransaction(String transaction, long entry, Map<String, BitSet> transactionMatrix, long nrOfTransactions) {

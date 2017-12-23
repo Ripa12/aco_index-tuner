@@ -1,5 +1,8 @@
 package ACO_Index;
 
+import sun.awt.image.ImageWatched;
+
+import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.stream.IntStream;
 
@@ -8,8 +11,53 @@ import java.util.stream.IntStream;
  */
 public class Ant {
 
-    LinkedList<LinkedList<String>> solution;
+    LinkedList<Node> localSolution;
+    //LinkedList<Node> globalSolution;
+    //double bestQuality;
+    double localQuality;
 
+    Node currentNode;
+
+    public Ant(){}
+
+    public void prepareAnt(Node node){
+        currentNode = node;
+    }
+
+    public double getLocalQuality(){
+        return localQuality;
+    }
+
+    public LinkedList<Node> getSolution(){
+        return localSolution; // ToDo: Should probably return a copy instead!
+    }
+
+    public void updatePheromoneLevel(double bestQuality){
+        double pheromone = 1/(1+localQuality-bestQuality);
+
+        for (Node node : localSolution) {
+            node.increasePheromone(pheromone);
+        }
+    }
+
+    public void findSolution(){
+        localSolution.addFirst(currentNode);
+
+        BitSet supportCount = currentNode.getTransactionsClone();
+        localQuality = supportCount.cardinality();
+
+        boolean finished = false;
+        while(!finished){
+            currentNode = currentNode.getNextProbableItem(5, 1, supportCount);
+            if(currentNode != null) {
+                supportCount.and(currentNode.getTransactions());
+                localQuality += supportCount.cardinality();
+            }
+            else{
+                finished = true;
+            }
+        }
+    }
 
 //    graph = generateRandomMatrix(noOfCities);
 //    numberOfCities = graph.length;
