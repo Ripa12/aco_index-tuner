@@ -27,6 +27,12 @@ public class Graph {
         return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size() + 1));
     }
 
+    public void evaporatePheromones(double minPheromone){
+        for (Node node : nodes) {
+            node.evaporatePheromone(minPheromone);
+        }
+    }
+
     public static Graph buildGraph(String filename, int nrOfAttributes, long nrOfTransactions) {
         Map<String, BitSet> transactionMatrix = new HashMap<>();
 

@@ -13,11 +13,9 @@ import java.util.stream.IntStream;
  * Created by Richard on 2017-12-18.
  */
 public class Node {
-    private static final double PHEROMONE_PERSISTENCE = 0.5; // ToDo: Friend to Ant Colony class
-    private static final double WEIGHT_LIMIT = 100; // ToDo: Move somewhere else!
-
-    private static double maxPheromone;
-    private static double minPheromone;
+    public static final double PHEROMONE_PERSISTENCE = 0.5; // ToDo: Friend to Ant Colony class
+    private static final int WEIGHT_LIMIT = 100; // ToDo: Move somewhere else!
+    private static final int WEIGHT = 5; // ToDo: Temporary, should be read from file!
 
     private ArrayList<Map.Entry<Node, Boolean>> neighbours; // ToDo: Pheromone on every edge instead of node!
 
@@ -29,6 +27,8 @@ public class Node {
     private double pheromone; // ToDo: Maybe float?
 
     public Node(BitSet transactions, String attribute) {
+        this.weight = WEIGHT; // ToDo: Temporary solution
+
         this.pheromone = 1;
         this.transactions = transactions;
         this.attribute = attribute;
@@ -175,13 +175,13 @@ public class Node {
         return heuristics;
     }
 
-    public void increasePheromone(double delta){
+    public void increasePheromone(double delta, double maxPheromone){
         pheromone = ((PHEROMONE_PERSISTENCE) * pheromone) + delta;
         if(pheromone > maxPheromone)
             pheromone = maxPheromone;
     }
 
-    public void evaporatePheromone(){
+    public void evaporatePheromone(double minPheromone){
         pheromone = pheromone * (1 - PHEROMONE_PERSISTENCE);
         if(pheromone < minPheromone)
             pheromone = minPheromone;

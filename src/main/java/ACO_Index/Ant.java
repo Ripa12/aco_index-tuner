@@ -11,12 +11,12 @@ import java.util.stream.IntStream;
  */
 public class Ant {
 
-    LinkedList<Node> localSolution;
+    private LinkedList<Node> localSolution;
     //LinkedList<Node> globalSolution;
     //double bestQuality;
-    double localQuality;
+    private double localQuality;
 
-    Node currentNode;
+    private Node currentNode;
 
     public Ant(){}
 
@@ -32,11 +32,11 @@ public class Ant {
         return localSolution; // ToDo: Should probably return a copy instead!
     }
 
-    public void updatePheromoneLevel(double bestQuality){
+    public void updatePheromoneLevel(double bestQuality, double maxPheromone){
         double pheromone = 1/(1+localQuality-bestQuality);
 
         for (Node node : localSolution) {
-            node.increasePheromone(pheromone);
+            node.increasePheromone(pheromone, maxPheromone);
         }
     }
 

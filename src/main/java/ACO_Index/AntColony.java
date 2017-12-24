@@ -19,11 +19,16 @@ public class AntColony {
     //private int nrOfAnts;
     private int remainingIterations;
     private LinkedList<Node> globalSolution;
-    
+
+    private double maxPheromone;
+    private double minPheromone;
+
     private ArrayList<Ant> ants;
     
-    public AntColony(int nrOfAnts, int remainingIterations, Graph graph){
+    public AntColony(int nrOfAnts, int remainingIterations, double initialMaxP, double initialMinP, Graph graph){
         //this.nrOfAnts = nrOfAnts;
+        this.maxPheromone = initialMaxP;
+        this.minPheromone = initialMinP;
         this.graph = graph;
         this.remainingIterations = remainingIterations;
         ants = new ArrayList<>(nrOfAnts);
@@ -31,6 +36,22 @@ public class AntColony {
         
         for (int i = 0; i < nrOfAnts; i++){
             ants.add(new Ant());
+        }
+    }
+
+    private void updateMaxPheromoneLimit(double bestQuality){
+        // ToDo: PHEROMONE_PERSISTENCE should probably be a local constant
+        maxPheromone = bestQuality / (1 - Node.PHEROMONE_PERSISTENCE);
+    }
+
+    private void updateMinPheromoneLimit(double bestQuality){
+        // ToDo: PHEROMONE_PERSISTENCE should probably be a local constant
+        maxPheromone = bestQuality / (1 - Node.PHEROMONE_PERSISTENCE);
+    }
+
+    private void distributeAntPheromones(double bestQuality){
+        for (Ant ant : ants) {
+            ant.updatePheromoneLevel(bestQuality, maxPheromone);
         }
     }
     
@@ -44,17 +65,23 @@ public class AntColony {
             
             double solutionQuality = 0;
             
-            for (Ant ant :
-                    ants) {
+            for (Ant ant : ants) {
                 ant.prepareAnt(graph.getRandomNode());
                 
                 ant.findSolution(); // ToDo: Maybe return solution here?
                 
-                if(ant.localQuality > solutionQuality) {
+                if(ant.getLocalQuality() > solutionQuality) {
                     bestLocalSolution = (LinkedList<Node>)ant.getSolution().clone();
-                    solutionQuality = ant.localQuality;
+                    solutionQuality = ant.getLocalQuality();
                 }
             }
+
+            // Max Pheromone Limit
+            updateMaxPheromoneLimit(solutionQuality);
+            // Spread Pheromone for every found solution
+            distributeAntPheromones(solutionQuality);
+            // Evaporate all pheromones
+            graph.evaporatePheromones(minPheromone);
         }
 
         bestLocalSolution.forEach(System.out::println);
