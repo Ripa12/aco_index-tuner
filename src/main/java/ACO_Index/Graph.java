@@ -23,8 +23,12 @@ public class Graph {
         //debugString(transactionMatrix);
     }
 
+    public int getNumberOfNodes(){
+        return nodes.size();
+    }
+
     public Node getRandomNode(){
-        return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size() + 1));
+        return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size()));
     }
 
     public void evaporatePheromones(double minPheromone){

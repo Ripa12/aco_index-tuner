@@ -133,8 +133,9 @@ public class Node {
     private ArrayList<Double> calculateProbabilities(long minsup, int currentWeight, BitSet bitset){
         ArrayList<Double> probabilities = calculateHeuristics(minsup, bitset);
 
-        double totalHeuristics = 0;
+        double totalHeuristics = 0; // ToDo: Always 1!
         double totalPheromone = 0;
+        double sumProbability = 0;
         for(int i = 0; i < probabilities.size(); i++){
             totalPheromone += neighbours.get(i).getKey().pheromone;
             totalHeuristics += probabilities.get(i);
@@ -142,12 +143,18 @@ public class Node {
         for(int i = 0; i < probabilities.size(); i++){
             // ToDo: Alpha and Beta
             if(WEIGHT_LIMIT >= (currentWeight + weight)) {
-                probabilities.set(i, ((neighbours.get(i).getKey().pheromone * probabilities.get(i)) /
-                        (totalPheromone * totalHeuristics)/neighbours.get(i).getKey().weight));
+                double tempValue = ((neighbours.get(i).getKey().pheromone * probabilities.get(i)) /
+                        (totalPheromone * totalHeuristics)/neighbours.get(i).getKey().weight);
+                sumProbability += tempValue;
+                probabilities.set(i, (tempValue));
             }
             else{
                 probabilities.set(i, 0.0);
             }
+        }
+
+        for(int i = 0; i < probabilities.size(); i++) {
+            probabilities.set(i, probabilities.get(i)/sumProbability);
         }
 
         return probabilities;
