@@ -59,23 +59,23 @@ public class AntColony {
     }
     
     public void start(){
-        //boolean finsihed = false;
+        //boolean finished = false;
 
-        LinkedList<Node> bestLocalSolution = null;
+        // ToDo: Maybe solution should be a tree instead of a LinkedList to avoid duplicate indexes
+        LinkedList<LinkedList<Node>> bestLocalSolution = null;
 
         double solutionQuality = 0;
 
         while (remainingIterations > 0){
             remainingIterations--;
-            
 
             for (Ant ant : ants) {
-                ant.prepareAnt(graph.getRandomNode());
+                //ant.prepareAnt(graph.getRandomNode());
                 
-                ant.findSolution(); // ToDo: Maybe return solution here?
+                ant.findSolution(graph, 100); // ToDo: Maybe return solution here? Should graph really be passed to Ant? weightLimit should not be static!
 
                 if(ant.getLocalQuality() > solutionQuality) {
-                    bestLocalSolution = (LinkedList<Node>)ant.getSolution().clone();
+                    bestLocalSolution = ant.getClonedSolution();
                     solutionQuality = ant.getLocalQuality();
                 }
             }
@@ -90,7 +90,16 @@ public class AntColony {
             graph.evaporatePheromones(minPheromone);
         }
 
-        bestLocalSolution.forEach(n -> System.out.println(n.getAttribute()));
+        bestLocalSolution.forEach(n -> n.forEach(t -> System.out.println(t.getAttribute())));
+        for(LinkedList<Node> list : bestLocalSolution){
+            System.out.print("[");
+            for(Node node : list){
+                System.out.print(" " + node.getAttribute() + " ");
+            }
+            System.out.println("]");
+        }
+        System.out.println("Quality: " + solutionQuality);
+
     }
 
 }

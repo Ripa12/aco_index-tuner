@@ -45,6 +45,10 @@ public class Node {
         }
     }
 
+    public int getWeight(){
+        return weight;
+    }
+
     public BitSet getTransactionsClone() {
         return (BitSet) transactions.clone();
     }
@@ -114,8 +118,6 @@ public class Node {
 
     public Node getNextProbableItem(long minsup, int currentWeight, BitSet bitset) {
 
-        Node result = null;
-
         // Code snippet below taken from http://www.baeldung.com/java-ant-colony-optimization
         ArrayList<Double> probabilities = calculateProbabilities(minsup, currentWeight, bitset);
         double rand = ThreadLocalRandom.current().nextDouble();
@@ -123,11 +125,11 @@ public class Node {
         for (int i = 0; i < neighbours.size(); i++) {
             total += probabilities.get(i);
             if (total >= rand) {
-                result = neighbours.get(i).getKey();
+                return neighbours.get(i).getKey();
             }
         }
 
-        return result;
+        return null;
     }
 
     private ArrayList<Double> calculateProbabilities(long minsup, int currentWeight, BitSet bitset){
@@ -142,7 +144,7 @@ public class Node {
         }
         for(int i = 0; i < probabilities.size(); i++){
             // ToDo: Alpha and Beta
-            if(WEIGHT_LIMIT >= (currentWeight + weight)) {
+            if(WEIGHT_LIMIT > (currentWeight + neighbours.get(i).getKey().weight) && probabilities.get(i) > 0) {
                 double tempValue = ((neighbours.get(i).getKey().pheromone * probabilities.get(i)) /
                         (totalPheromone * totalHeuristics)/neighbours.get(i).getKey().weight);
                 sumProbability += tempValue;
@@ -164,15 +166,15 @@ public class Node {
     private ArrayList<Double> calculateHeuristics(long minsup, BitSet bitset) {
         ArrayList<Double> heuristics = new ArrayList<>(neighbours.size());
 
-        double total = 0;
+//        double total = 0;
         for (Map.Entry<Node, Boolean> neighbour: neighbours) {
             double tempValue = (double)getItemSetFrequency((BitSet) bitset.clone(), neighbour.getKey().transactions);
             heuristics.add(tempValue);
-            total += tempValue;
+//            total += tempValue;
         }
         for(int i = 0; i < heuristics.size(); i++){
             if(heuristics.get(i) >= minsup) {
-                heuristics.set(i, heuristics.get(i) / total);
+                heuristics.set(i, heuristics.get(i) / (weight * weight));
             }
             else{
                 heuristics.set(i, 0.0);

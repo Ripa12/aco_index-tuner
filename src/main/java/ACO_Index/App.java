@@ -8,7 +8,7 @@ package ACO_Index;
 
 public class App 
 {
-    final static int NR_OF_ATTRIBUTES = 100;
+    final static int NR_OF_ATTRIBUTES = 1000;
     final static long NR_OF_TRANSACTIONS = 200000;
     final static int TRANSACTION_LENGTH = 5;
 
@@ -24,7 +24,7 @@ public class App
 
         startTime = System.nanoTime();
         //graph.debugFrequentItemSets(20);
-        AntColony antColony = new AntColony(10, 100, 10, 0.05, graph);
+        AntColony antColony = new AntColony(5, 50, 10, 0.05, graph);
         antColony.start();
         long frequentItemSetBuildTime = System.nanoTime() - startTime;
 

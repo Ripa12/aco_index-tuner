@@ -27,6 +27,8 @@ public class Graph {
         return nodes.size();
     }
 
+
+    // ToDo: Would be better to return random node based on probability
     public Node getRandomNode(){
         return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size()));
     }

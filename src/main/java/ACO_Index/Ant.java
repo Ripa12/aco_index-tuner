@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
  */
 public class Ant {
 
-    private LinkedList<Node> localSolution;
+    private LinkedList<LinkedList<Node>> localSolution;
     //LinkedList<Node> globalSolution;
     //double bestQuality;
     private double localQuality;
@@ -22,42 +22,55 @@ public class Ant {
 
     }
 
-    public void prepareAnt(Node node){
-        currentNode = node;
-        localSolution = new LinkedList<>();
-    }
-
     public double getLocalQuality(){
         return localQuality;
     }
 
-    public LinkedList<Node> getSolution(){
-        return localSolution; // ToDo: Should probably return a copy instead!
+    public LinkedList<LinkedList<Node>> getClonedSolution(){
+        return (LinkedList<LinkedList<Node>>)localSolution.clone(); // ToDo: Should probably return a copy instead!
     }
 
     public void updatePheromoneLevel(double bestQuality, double maxPheromone){
-        double pheromone = 1/(1+localQuality-bestQuality);
+        double pheromone = 1 / (1+((bestQuality-localQuality)/bestQuality));
 
-        for (Node node : localSolution) {
-            node.increasePheromone(pheromone, maxPheromone);
-        }
+        localSolution.forEach(l -> l.forEach(s->s.increasePheromone(pheromone, maxPheromone)));
     }
 
-    public void findSolution(){
-        localSolution.addFirst(currentNode);
+    public void findSolution(Graph graph, int weightLimit){
+        boolean localSolutionFound = false;
 
-        BitSet supportCount = currentNode.getTransactionsClone();
-        localQuality = supportCount.cardinality();
+        localSolution = new LinkedList<>();
 
-        boolean finished = false;
-        while(!finished){
-            currentNode = currentNode.getNextProbableItem(5, 1, supportCount);
-            if(currentNode != null) {
-                supportCount.and(currentNode.getTransactions());
-                localQuality += supportCount.cardinality();
+        int totalWeight = 0;
+        while(!localSolutionFound) {
+            Node currentNode = graph.getRandomNode();
+
+            totalWeight += currentNode.getWeight();
+            if (totalWeight < weightLimit) {
+                LinkedList<Node> partialSolution = new LinkedList<>();
+                partialSolution.addFirst(currentNode);
+
+                BitSet supportCount = currentNode.getTransactionsClone();
+                localQuality = supportCount.cardinality();
+
+                boolean finished = false;
+                while (!finished) {
+                    currentNode = currentNode.getNextProbableItem(3, totalWeight, supportCount);
+                    if (currentNode != null) {
+                        supportCount.and(currentNode.getTransactions());
+                        localQuality += supportCount.cardinality();
+                        totalWeight += currentNode.getWeight();
+                        partialSolution.add(currentNode);
+                    } else {
+                        finished = true;
+                    }
+                }
+
+                localSolution.add(partialSolution);
             }
-            else{
-                finished = true;
+            else
+            {
+                localSolutionFound = true;
             }
         }
     }
