@@ -7,30 +7,25 @@ import java.util.LinkedList;
  * Created by Richard on 2017-12-18.
  */
 public class AntColony {
-//    private double c = 1.0;
 //    private double alpha = 1;
 //    private double beta = 5;
-//    private double evaporation = 0.5;
-//    private double Q = 500;
-//    private double antFactor = 0.8;
-//    private double randomFactor = 0.01;
 
     private Graph graph;
-    //private int nrOfAnts;
-    private int remainingIterations;
     private LinkedList<Node> globalSolution;
 
     private double maxPheromone;
     private double minPheromone;
 
+    private double pheromonePersistence;
+
     private ArrayList<Ant> ants;
     
-    public AntColony(int nrOfAnts, int remainingIterations, double initialMaxP, double initialMinP, Graph graph){
-        //this.nrOfAnts = nrOfAnts;
+    public AntColony(int nrOfAnts, double initialMaxP,
+                     double initialMinP, double persistence, Graph graph){
+        this.pheromonePersistence = persistence;
         this.maxPheromone = initialMaxP;
         this.minPheromone = initialMinP;
         this.graph = graph;
-        this.remainingIterations = remainingIterations;
         ants = new ArrayList<>(nrOfAnts);
         globalSolution = null;
         
@@ -41,40 +36,41 @@ public class AntColony {
 
     private void updateMaxPheromoneLimit(double bestQuality){
         // ToDo: PHEROMONE_PERSISTENCE should probably be a local constant
-        maxPheromone = bestQuality / (1 - Node.PHEROMONE_PERSISTENCE);
+        maxPheromone = bestQuality / (1 - pheromonePersistence);
     }
 
     private void updateMinPheromoneLimit(double bestQuality){
+        final double pBest = .9; // ToDo: Temporary solution
         // ToDo: PHEROMONE_PERSISTENCE should probably be a local constant
-        //minPheromone = (1 - Math.pow(Math.E, Math.log(1/bestQuality)/graph.getNumberOfNodes())) /
-        //        ((1-(graph.getNumberOfNodes()/2)))*Math.pow(Math.E, Math.log(bestQuality));
+        minPheromone = (1 - Math.pow(Math.E, Math.log(1/pBest)/graph.getNumberOfNodes())) /
+                ((1-(graph.getNumberOfNodes()/2)))*Math.pow(Math.E, Math.log(pBest));
 
-        minPheromone = .05;
+        //minPheromone = .05;
     }
 
     private void distributeAntPheromones(double bestQuality){
+        // ToDo: Only one ant should update(globally best)!
         for (Ant ant : ants) {
-            ant.updatePheromoneLevel(bestQuality, maxPheromone);
+            ant.updatePheromoneLevel(bestQuality, maxPheromone, pheromonePersistence);
         }
     }
     
-    public void start(){
+    public void start(double alpha, double beta, int remainingIterations, int minsup, int weightLimit){
         //boolean finished = false;
 
         // ToDo: Maybe solution should be a tree instead of a LinkedList to avoid duplicate indexes
         LinkedList<LinkedList<Node>> bestLocalSolution = null;
 
         double solutionQuality = 0;
-
+        Ant bestAnt = null;
         while (remainingIterations > 0){
             remainingIterations--;
 
             for (Ant ant : ants) {
-                //ant.prepareAnt(graph.getRandomNode());
-                
-                ant.findSolution(graph, 100); // ToDo: Maybe return solution here? Should graph really be passed to Ant? weightLimit should not be static!
+                ant.findSolution(alpha, beta, graph, weightLimit, minsup); // ToDo: Maybe return solution here? Should graph really be passed to Ant? weightLimit should not be static!
 
                 if(ant.getLocalQuality() > solutionQuality) {
+                    bestAnt = ant;
                     bestLocalSolution = ant.getClonedSolution();
                     solutionQuality = ant.getLocalQuality();
                 }
@@ -85,9 +81,15 @@ public class AntColony {
             // Min Pheromone Limit
             updateMinPheromoneLimit(solutionQuality);
             // Spread Pheromone for every found solution
-            distributeAntPheromones(solutionQuality);
+            //distributeAntPheromones(solutionQuality);
+            if(bestAnt != null) {
+                bestAnt.updatePheromoneLevel(solutionQuality, maxPheromone, pheromonePersistence);
+            }
+
             // Evaporate all pheromones
-            graph.evaporatePheromones(minPheromone);
+            graph.evaporatePheromones(minPheromone, pheromonePersistence);
+
+            bestAnt = null;
         }
 
         bestLocalSolution.forEach(n -> n.forEach(t -> System.out.println(t.getAttribute())));

@@ -8,14 +8,14 @@ package ACO_Index;
 
 public class App 
 {
-    final static int NR_OF_ATTRIBUTES = 1000;
-    final static long NR_OF_TRANSACTIONS = 200000;
+    final static int NR_OF_ATTRIBUTES = 25;
+    final static long NR_OF_TRANSACTIONS = 60000;
     final static int TRANSACTION_LENGTH = 5;
 
     public static void main( String[] args )
     {
         long startTime = System.nanoTime();
-        //DataSampleGenerator.generateDataSample(NR_OF_ATTRIBUTES, NR_OF_TRANSACTIONS, TRANSACTION_LENGTH, "TestData.txt");
+        DataSampleGenerator.generateDataSample(NR_OF_ATTRIBUTES, NR_OF_TRANSACTIONS, TRANSACTION_LENGTH, "TestData.txt");
         long transactionBuildTime = System.nanoTime() - startTime;
 
         startTime = System.nanoTime();
@@ -24,8 +24,9 @@ public class App
 
         startTime = System.nanoTime();
         //graph.debugFrequentItemSets(20);
-        AntColony antColony = new AntColony(5, 50, 10, 0.05, graph);
-        antColony.start();
+        AntColony antColony = new AntColony(50, 10,
+                0.05, 0.95, graph);
+        antColony.start(1, 1, 100, 3, 100);
         long frequentItemSetBuildTime = System.nanoTime() - startTime;
 
         System.out.println("\nTime to generate transactions: " + transactionBuildTime / 1000000000.0);

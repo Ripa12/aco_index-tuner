@@ -15,10 +15,11 @@ import java.util.stream.Stream;
  */
 public class Graph {
     private ArrayList<Node> nodes;
+    Node root;
 
-    private Graph(ArrayList<Node> nodes) {
+    private Graph(ArrayList<Node> nodes, Node root) {
         this.nodes = nodes;
-
+        this.root = root;
         // Debugging
         //debugString(transactionMatrix);
     }
@@ -28,14 +29,21 @@ public class Graph {
     }
 
 
-    // ToDo: Would be better to return random node based on probability
-    public Node getRandomNode(){
-        return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size()));
+    public ArrayList<Node> getNodeArrayClone(){
+        return (ArrayList<Node>)nodes.clone();
     }
 
-    public void evaporatePheromones(double minPheromone){
+    // ToDo: Make graph bi-directed and let all ants have their own list of nodes, so that
+    // duplicate indexes are removed by removing an element from the node list every cycle, or block and unblock edges,
+    // which would not require a bi-directed graph.
+    public Node getRandomNode(double alpha, double beta, int minsup, int currentWeight, int weightLimit){
+        return this.root.getNextProbableItem(alpha, beta, minsup,currentWeight,weightLimit, this.root.getTransactionsClone());
+        //return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size()));
+    }
+
+    public void evaporatePheromones(double minPheromone, double pheromonePersistence){
         for (Node node : nodes) {
-            node.evaporatePheromone(minPheromone);
+            node.evaporatePheromone(minPheromone, pheromonePersistence);
         }
     }
 
@@ -63,7 +71,14 @@ public class Graph {
             e.printStackTrace();
         }
 
-        return new Graph(generateConnections(transactionMatrix, nrOfAttributes));
+        ArrayList<Node> connections = generateConnections(transactionMatrix, nrOfAttributes);
+        BitSet tempBitSet = connections.get(0).getTransactionsClone();
+        tempBitSet.set(0, tempBitSet.length(), true);
+
+        Node root = new Node(tempBitSet, "root", connections);
+
+
+        return new Graph(connections, root);
     }
 
     private static void processTransaction(String transaction, long entry, Map<String, BitSet> transactionMatrix, long nrOfTransactions) {
@@ -106,7 +121,7 @@ public class Graph {
     }
 
 
-    public void debugFrequentItemSets(long minsup) {
+    public void debugFrequentItemSets(int minsup) {
         LinkedList<LinkedList<String>> itemsets = new LinkedList<>();
 
         for (Node node: nodes) {

@@ -7,17 +7,16 @@ import sun.awt.image.ImageWatched;
 import javax.swing.text.StyledEditorKit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
  * Created by Richard on 2017-12-18.
  */
 public class Node {
-    public static final double PHEROMONE_PERSISTENCE = 0.5; // ToDo: Friend to Ant Colony class
-    private static final int WEIGHT_LIMIT = 100; // ToDo: Move somewhere else!
     private static final int WEIGHT = 5; // ToDo: Temporary, should be read from file!
 
-    private ArrayList<Map.Entry<Node, Boolean>> neighbours; // ToDo: Pheromone on every edge instead of node!
+    private ArrayList<Map.Entry<Node, Boolean>> neighbours; // ToDo: Pheromone on every edge instead of node! maybe...
 
     private BitSet transactions;
     private String attribute;
@@ -36,6 +35,19 @@ public class Node {
         supportCount = transactions.cardinality();
 
         neighbours = new ArrayList<>(); // ToDo: Possible to Reserve Memory?
+    }
+
+    public Node(BitSet transactions, String attribute, ArrayList<Node> neighbours) {
+        this.weight = WEIGHT; // ToDo: Temporary solution
+
+        this.pheromone = 1;
+        this.transactions = transactions;
+        this.attribute = attribute;
+
+        supportCount = transactions.cardinality();
+
+        this.neighbours = new ArrayList<>(neighbours.size());
+        neighbours.forEach((n)->this.neighbours.add(new AbstractMap.SimpleEntry<Node, Boolean>(n, false)));
     }
 
     private void unblockEdges(){
@@ -92,7 +104,7 @@ public class Node {
     }
 
     // Frequent Item-set
-    public Map.Entry<Node, Boolean> getNextItem(long minsup, BitSet bitset) {
+    public Map.Entry<Node, Boolean> getNextItem(int minsup, BitSet bitset) {
 
         Map.Entry<Node, Boolean> result = null;
 
@@ -116,10 +128,10 @@ public class Node {
         return result;
     }
 
-    public Node getNextProbableItem(long minsup, int currentWeight, BitSet bitset) {
+    public Node getNextProbableItem(double alpha, double beta, int minsup, int currentWeight, int weightLimit, BitSet bitset) {
 
         // Code snippet below taken from http://www.baeldung.com/java-ant-colony-optimization
-        ArrayList<Double> probabilities = calculateProbabilities(minsup, currentWeight, bitset);
+        ArrayList<Double> probabilities = calculateProbabilities(alpha, beta, minsup, currentWeight, weightLimit, bitset);
         double rand = ThreadLocalRandom.current().nextDouble();
         double total = 0;
         for (int i = 0; i < neighbours.size(); i++) {
@@ -132,20 +144,22 @@ public class Node {
         return null;
     }
 
-    private ArrayList<Double> calculateProbabilities(long minsup, int currentWeight, BitSet bitset){
+    // ToDo: should probably be moved to Ant Colony
+    private ArrayList<Double> calculateProbabilities(double alpha, double beta, int minsup, int currentWeight, int weightLimit, BitSet bitset){
         ArrayList<Double> probabilities = calculateHeuristics(minsup, bitset);
 
-        double totalHeuristics = 0; // ToDo: Always 1!
+        double totalHeuristics = 0;
         double totalPheromone = 0;
         double sumProbability = 0;
         for(int i = 0; i < probabilities.size(); i++){
-            totalPheromone += neighbours.get(i).getKey().pheromone;
-            totalHeuristics += probabilities.get(i);
+            totalPheromone += Math.pow(neighbours.get(i).getKey().pheromone, alpha);
+            totalHeuristics += Math.pow(probabilities.get(i), beta);
         }
+
         for(int i = 0; i < probabilities.size(); i++){
             // ToDo: Alpha and Beta
-            if(WEIGHT_LIMIT > (currentWeight + neighbours.get(i).getKey().weight) && probabilities.get(i) > 0) {
-                double tempValue = ((neighbours.get(i).getKey().pheromone * probabilities.get(i)) /
+            if(weightLimit > (currentWeight + neighbours.get(i).getKey().weight) && probabilities.get(i) > 0) {
+                double tempValue = ((Math.pow(neighbours.get(i).getKey().pheromone, alpha) * Math.pow(probabilities.get(i), beta)) /
                         (totalPheromone * totalHeuristics)/neighbours.get(i).getKey().weight);
                 sumProbability += tempValue;
                 probabilities.set(i, (tempValue));
@@ -163,14 +177,12 @@ public class Node {
     }
 
     // ToDo: move this function to Ant and treat as an executable argument when invoking getNextItem
-    private ArrayList<Double> calculateHeuristics(long minsup, BitSet bitset) {
+    private ArrayList<Double> calculateHeuristics(int minsup, BitSet bitset) {
         ArrayList<Double> heuristics = new ArrayList<>(neighbours.size());
 
-//        double total = 0;
         for (Map.Entry<Node, Boolean> neighbour: neighbours) {
             double tempValue = (double)getItemSetFrequency((BitSet) bitset.clone(), neighbour.getKey().transactions);
             heuristics.add(tempValue);
-//            total += tempValue;
         }
         for(int i = 0; i < heuristics.size(); i++){
             if(heuristics.get(i) >= minsup) {
@@ -184,14 +196,14 @@ public class Node {
         return heuristics;
     }
 
-    public void increasePheromone(double delta, double maxPheromone){
-        pheromone = ((PHEROMONE_PERSISTENCE) * pheromone) + delta;
+    public void increasePheromone(double delta, double maxPheromone, double pheromonePersistence){
+        pheromone = ((pheromonePersistence) * pheromone) + delta;
         if(pheromone > maxPheromone)
             pheromone = maxPheromone;
     }
 
-    public void evaporatePheromone(double minPheromone){
-        pheromone = pheromone * (1 - PHEROMONE_PERSISTENCE);
+    public void evaporatePheromone(double minPheromone, double pheromonePersistence){
+        pheromone = pheromone * (1 - pheromonePersistence);
         if(pheromone < minPheromone)
             pheromone = minPheromone;
     }
