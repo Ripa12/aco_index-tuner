@@ -41,6 +41,16 @@ public class Graph {
         //return nodes.get(ThreadLocalRandom.current().nextInt(0, nodes.size()));
     }
 
+    // ToDo: Ugly solution, it would be better to move solutionTreeNode class to graph class
+    public Node getRoot(){
+        return this.root;
+    }
+
+//    // ToDo: Kinda ugly solution, but in the right direction
+//    public int getRootIndex(){
+//        return this.root.getIndex();
+//    }
+
     public void evaporatePheromones(double minPheromone, double pheromonePersistence){
         for (Node node : nodes) {
             node.evaporatePheromone(minPheromone, pheromonePersistence);

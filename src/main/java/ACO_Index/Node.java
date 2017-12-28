@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 public class Node {
     private static final int WEIGHT = 5; // ToDo: Temporary, should be read from file!
 
-    private ArrayList<Map.Entry<Node, Boolean>> neighbours; // ToDo: Pheromone on every edge instead of node! maybe...
+    private ArrayList<Map.Entry<Node, Boolean>> neighbours; // ToDo: Pheromone on every edge instead of node!
 
     private BitSet transactions;
     private String attribute;
@@ -24,6 +24,8 @@ public class Node {
 
     private int weight;
     private double pheromone; // ToDo: Maybe float?
+
+    private int index;
 
     public Node(BitSet transactions, String attribute) {
         this.weight = WEIGHT; // ToDo: Temporary solution
@@ -47,7 +49,7 @@ public class Node {
         supportCount = transactions.cardinality();
 
         this.neighbours = new ArrayList<>(neighbours.size());
-        neighbours.forEach((n)->this.neighbours.add(new AbstractMap.SimpleEntry<Node, Boolean>(n, false)));
+        neighbours.forEach((n)->this.neighbours.add(new AbstractMap.SimpleEntry<Node, Boolean>(n, true)));
     }
 
     private void unblockEdges(){
@@ -55,6 +57,16 @@ public class Node {
         neighbours){
             neighbour.setValue(true);
         }
+    }
+
+    public int getIndex(){
+        int result = index;
+        index = -1;
+        return result;
+    }
+
+    public int getNrOfNeighbours() {
+        return neighbours.size();
     }
 
     public int getWeight(){
@@ -83,8 +95,10 @@ public class Node {
         if (difference.cardinality() > 0) {
             if (this.supportCount >= to.supportCount) // ToDo: Check for minimum support between items, maybe?
             {
+                //to.index = neighbours.size();
                 neighbours.add(new AbstractMap.SimpleEntry<>(to, true));
             } else {
+                //index = to.neighbours.size();
                 to.neighbours.add(new AbstractMap.SimpleEntry<>(this, true));
             }
 
@@ -128,15 +142,18 @@ public class Node {
         return result;
     }
 
-    public Node getNextProbableItem(double alpha, double beta, int minsup, int currentWeight, int weightLimit, BitSet bitset) {
-
+    public Node getNextProbableItem(double alpha, double beta, int minsup, int currentWeight,
+                                    int weightLimit, BitSet supportCount){//, BitSet edgeStates) {
+        //this.index = -1;
         // Code snippet below taken from http://www.baeldung.com/java-ant-colony-optimization
-        ArrayList<Double> probabilities = calculateProbabilities(alpha, beta, minsup, currentWeight, weightLimit, bitset);
+        ArrayList<Double> probabilities = calculateProbabilities(alpha, beta, minsup, currentWeight, weightLimit, supportCount);
         double rand = ThreadLocalRandom.current().nextDouble();
         double total = 0;
         for (int i = 0; i < neighbours.size(); i++) {
             total += probabilities.get(i);
-            if (total >= rand) {
+            if (total >= rand){// && !edgeStates.get(i)) {
+                //this.index = i;
+                neighbours.get(i).getKey().index = i;
                 return neighbours.get(i).getKey();
             }
         }
@@ -145,8 +162,8 @@ public class Node {
     }
 
     // ToDo: should probably be moved to Ant Colony
-    private ArrayList<Double> calculateProbabilities(double alpha, double beta, int minsup, int currentWeight, int weightLimit, BitSet bitset){
-        ArrayList<Double> probabilities = calculateHeuristics(minsup, bitset);
+    private ArrayList<Double> calculateProbabilities(double alpha, double beta, int minsup, int currentWeight, int weightLimit, BitSet supportCount){
+        ArrayList<Double> probabilities = calculateHeuristics(minsup, supportCount);
 
         double totalHeuristics = 0;
         double totalPheromone = 0;
@@ -177,11 +194,11 @@ public class Node {
     }
 
     // ToDo: move this function to Ant and treat as an executable argument when invoking getNextItem
-    private ArrayList<Double> calculateHeuristics(int minsup, BitSet bitset) {
+    private ArrayList<Double> calculateHeuristics(int minsup, BitSet supportCount) {
         ArrayList<Double> heuristics = new ArrayList<>(neighbours.size());
 
         for (Map.Entry<Node, Boolean> neighbour: neighbours) {
-            double tempValue = (double)getItemSetFrequency((BitSet) bitset.clone(), neighbour.getKey().transactions);
+            double tempValue = (double)getItemSetFrequency((BitSet) supportCount.clone(), neighbour.getKey().transactions);
             heuristics.add(tempValue);
         }
         for(int i = 0; i < heuristics.size(); i++){

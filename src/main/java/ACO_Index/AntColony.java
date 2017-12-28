@@ -2,6 +2,7 @@ package ACO_Index;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Created by Richard on 2017-12-18.
@@ -59,7 +60,7 @@ public class AntColony {
         //boolean finished = false;
 
         // ToDo: Maybe solution should be a tree instead of a LinkedList to avoid duplicate indexes
-        LinkedList<LinkedList<Node>> bestLocalSolution = null;
+        Map<String, LinkedList<Node>> bestLocalSolution = null;
 
         double solutionQuality = 0;
         Ant bestAnt = null;
@@ -92,8 +93,9 @@ public class AntColony {
             bestAnt = null;
         }
 
-        bestLocalSolution.forEach(n -> n.forEach(t -> System.out.println(t.getAttribute())));
-        for(LinkedList<Node> list : bestLocalSolution){
+//        bestLocalSolution.entrySet().forEach(n -> n.getValue()
+//                .forEach(t -> System.out.println(t.getAttribute())));
+        for(LinkedList<Node> list : bestLocalSolution.values()){
             System.out.print("[");
             for(Node node : list){
                 System.out.print(" " + node.getAttribute() + " ");
