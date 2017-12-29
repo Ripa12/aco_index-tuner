@@ -136,14 +136,10 @@ public class Node {
         if (difference.cardinality() > 0) {
             if (this.supportCount >= to.supportCount) // ToDo: Check for minimum support between items, maybe?
             {
-                //to.index = neighbours.size();
                 neighbours.add(new Connection(to, 1.0, new BitSet(nrOfAnts)));
             } else {
-                //index = to.neighbours.size();
                 to.neighbours.add(new Connection(this, 1.0, new BitSet(nrOfAnts)));
             }
-//            neighbours.add(new Connection(to, 1.0));
-//            to.neighbours.add(new Connection(this, 1.0));
         }
     }
 
@@ -183,28 +179,15 @@ public class Node {
         return result;
     }
 
-//    public Connection getNextProbableItem(double alpha, double beta, int minsup, int currentWeight,
-//                                          int weightLimit, BitSet supportCount){
-//        BitSet identityBitSet = new BitSet(neighbours.size());
-//        //identityBitSet.set(0, neighbours.size(), false);
-//
-//        return getNextProbableItem(alpha, beta, minsup, currentWeight, weightLimit, supportCount, identityBitSet);
-//    }
-
     public Connection getNextProbableItem(double alpha, double beta, int minsup, int currentWeight,
-                                    int weightLimit, BitSet supportCount, int antIndex){//, BitSet edgeStates) {
-        //this.index = -1;
-        // Code snippet below taken from http://www.baeldung.com/java-ant-colony-optimization
+                                    int weightLimit, BitSet supportCount, int antIndex){
         ArrayList<Double> probabilities = calculateProbabilities(alpha, beta, minsup, currentWeight, weightLimit, supportCount);
         double rand = ThreadLocalRandom.current().nextDouble();
         double total = 0;
         for (int i = 0; i < neighbours.size(); i++) {
             total += probabilities.get(i);
-            if (total >= rand && !neighbours.get(i).antBlockades.get(antIndex)){// && !neighbours.get(i).getKey().visited) {
-                //this.index = i;
-                //edgeStates.set(i);
+            if (total >= rand && !neighbours.get(i).antBlockades.get(antIndex)){
                 neighbours.get(i).getKey().index = i;
-                visited = true;
                 return neighbours.get(i);
             }
         }

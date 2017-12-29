@@ -55,6 +55,10 @@ public class Ant {
         this.index = index;
     }
 
+    public int getTotalWeight(){
+        return totalWeight;
+    }
+
     public double getLocalQuality(){
         return localQuality;
     }
@@ -104,13 +108,14 @@ public class Ant {
             int partialQuality = 0;
             if (currentNode != null) {
                 //solutionTreeNode = solutionTreeNode.updateSolutionTree(parentNode, currentNode);
-                partialWeight += currentNode.getKey().getWeight();
+//                partialWeight += currentNode.getKey().getWeight();
+                totalWeight += currentNode.getKey().getWeight();
 
                 LinkedList<Node.Connection> partialSolution = new LinkedList<>();
                 partialSolution.addFirst(currentNode);
 
                 BitSet supportCount = currentNode.getKey().getTransactionsClone();
-                partialQuality += supportCount.cardinality();
+                partialQuality = supportCount.cardinality();
 
                 boolean finished = false;
                 while (!finished) {
@@ -119,9 +124,9 @@ public class Ant {
                             weightLimit, supportCount, index);//, solutionTreeNode.edgeStates);
                     if (currentNode != null) {
                         supportCount.and(currentNode.getKey().getTransactions());
-//                        partialQuality += supportCount.cardinality();
+                        partialQuality += supportCount.cardinality();
 //                        partialWeight += currentNode.getKey().getWeight();
-                        localQuality += supportCount.cardinality();
+                        //localQuality += supportCount.cardinality();
                         totalWeight += currentNode.getKey().getWeight();
                         partialSolution.add(currentNode);
                         //solutionTreeNode = solutionTreeNode.updateSolutionTree(parentNode, currentNode);
@@ -142,6 +147,8 @@ public class Ant {
 //                    totalWeight += partialWeight;
 //                    localQuality += partialQuality;
 //                }
+
+                localQuality += partialQuality;
                 localSolution.add(partialSolution);
             }
             else

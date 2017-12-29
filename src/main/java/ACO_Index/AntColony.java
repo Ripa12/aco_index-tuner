@@ -65,6 +65,8 @@ public class AntColony {
         LinkedList<LinkedList<Node.Connection>> bestLocalSolution = null;
 
         double solutionQuality = 0;
+        int solutionWeight = 0;
+
         Ant bestAnt = null;
         while (remainingIterations > 0){
             remainingIterations--;
@@ -76,16 +78,20 @@ public class AntColony {
                     bestAnt = ant;
                     bestLocalSolution = ant.getClonedSolution();
                     solutionQuality = ant.getLocalQuality();
+                    solutionWeight = ant.getTotalWeight();
                 }
             }
 
-            // Max Pheromone Limit
-            updateMaxPheromoneLimit(solutionQuality);
-            // Min Pheromone Limit
-            updateMinPheromoneLimit(solutionQuality);
-            // Spread Pheromone for every found solution
+
+
             //distributeAntPheromones(solutionQuality);
             if(bestAnt != null) {
+                // Max Pheromone Limit
+                updateMaxPheromoneLimit(solutionQuality);
+                // Min Pheromone Limit
+                updateMinPheromoneLimit(solutionQuality);
+
+                // Spread Pheromone for every found solution
                 bestAnt.updatePheromoneLevel(solutionQuality, maxPheromone, pheromonePersistence);
             }
 
@@ -105,6 +111,7 @@ public class AntColony {
             System.out.println("]");
         }
         System.out.println("Quality: " + solutionQuality);
+        System.out.println("Weight: " + solutionWeight);
 
     }
 

@@ -142,8 +142,9 @@ public class Graph {
     }
 
 
-    public void debugFrequentItemSets(int minsup) {
-        LinkedList<LinkedList<String>> itemsets = new LinkedList<>();
+//    public void debugFrequentItemSets(int minsup) {
+    public List<Map.Entry<Integer, Integer>> debugFrequentItemSets(int minsup) {
+        LinkedList<Map.Entry<LinkedList<String>, Map.Entry<Integer, Integer>>> itemsets = new LinkedList<>();
 
         for (Node node: nodes) {
             boolean itemsetsComplete = false;
@@ -154,6 +155,8 @@ public class Graph {
                 Node.Connection lastEdge;
 
                 BitSet supportCount = currentNode.getKey().getTransactionsClone();
+                int quality = supportCount.cardinality();
+                int totalWeight = currentNode.getKey().getWeight();
 
                 boolean itemsetComplete = false;
                 while (!itemsetComplete) {
@@ -162,6 +165,8 @@ public class Graph {
                     if (currentNode != null) {
                         itemset.add(currentNode.getKey().getAttribute());
                         supportCount.and(currentNode.getKey().getTransactions());
+                        quality += supportCount.cardinality();
+                        totalWeight += currentNode.getKey().getWeight();
                     } else {
                         itemsetComplete = true;
                         lastEdge.setValue(0.0);
@@ -169,12 +174,14 @@ public class Graph {
                 }
                 if(!itemset.isEmpty()) {
                     itemset.addFirst(node.getAttribute());
-                    itemsets.add(itemset);
+                    itemsets.add(new AbstractMap.SimpleEntry<LinkedList<String>, Map.Entry<Integer, Integer>>(itemset,
+                    new AbstractMap.SimpleEntry<Integer, Integer>(quality, totalWeight)));
                 }
                 else{
                     if(node.getSupportCount() >= minsup) {
                         itemset.add(node.getAttribute());
-                        itemsets.add(itemset);
+                        itemsets.add(new AbstractMap.SimpleEntry<LinkedList<String>, Map.Entry<Integer, Integer>>(itemset,
+                                new AbstractMap.SimpleEntry<Integer, Integer>(quality, totalWeight)));
                     }
                     itemsetsComplete = true;
                 }
@@ -182,8 +189,8 @@ public class Graph {
             //resetSkip();
         }
         // Debugging
-        //itemsets.forEach(set -> System.out.print(set.toString()));
         itemsets.forEach(set -> System.out.println(set.toString()));
+        return itemsets.stream().map(s->s.getValue()).collect(Collectors.toList());
     }
 
 }
