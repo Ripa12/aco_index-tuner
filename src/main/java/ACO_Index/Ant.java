@@ -38,39 +38,52 @@ public class Ant {
     }
 
 
+    private BitSet visitedNodes;
     //SolutionTreeNode solutionTreeRoot;
     //private LinkedList<SolutionTreeNode> solutionTreeLeaves;
-
-    private TreeMap<String, LinkedList<Node>> localSolution;
+    private LinkedList<LinkedList<Node.Connection>> localSolution;
+    //private TreeMap<String, LinkedList<Node>> localSolution;
     //LinkedList<Node> globalSolution;
     //double bestQuality;
     private double localQuality;
     private int totalWeight;
+    private int index;
 
     private Node currentNode;
 
-    //public Ant(){}
+    public Ant(int index){
+        this.index = index;
+    }
 
     public double getLocalQuality(){
         return localQuality;
     }
 
-    public Map<String, LinkedList<Node>> getClonedSolution(){
-        return (Map<String, LinkedList<Node>>)localSolution.clone(); // ToDo: Should probably return a copy instead!
+    public LinkedList<LinkedList<Node.Connection>> getClonedSolution(){
+        return (LinkedList<LinkedList<Node.Connection>>)localSolution.clone(); // ToDo: Should probably return a copy instead!
     }
 
     public void updatePheromoneLevel(double bestQuality, double maxPheromone, double pheromonePersistence){
-        double pheromone = 1 / (1+((bestQuality-localQuality)/bestQuality));
+        double delta = 1 / (1+((bestQuality-localQuality)/bestQuality));
 
-        localSolution.entrySet().forEach(l -> l.getValue()
-                .forEach(s->s.increasePheromone(pheromone, maxPheromone, pheromonePersistence)));
+        for (LinkedList<Node.Connection> connections :
+                localSolution) {
+            for (Node.Connection connection :
+                 connections) {
+                connection.setValue(((pheromonePersistence) * connection.getValue()) + delta);
+                if(connection.getValue() > maxPheromone)
+                    connection.setValue(maxPheromone);
+            }
+        }
     }
 
     public void findSolution(double alpha, double beta, Graph graph, int weightLimit, int minsup){
         boolean localSolutionFound = false;
 
-        localSolution = new TreeMap<>();
-        //localSolution = new LinkedList<>();
+        //visitedNodes = new BitSet(graph.getNumberOfNodes());
+        //visitedNodes.set(0, visitedNodes.size(), false);
+        //localSolution = new TreeMap<>();
+        localSolution = new LinkedList<>();
 //        solutionTreeRoot = new SolutionTreeNode(graph.getRoot(), null);
 //        SolutionTreeNode solutionTreeNode = solutionTreeRoot;
 
@@ -78,55 +91,68 @@ public class Ant {
 
         //ArrayList<Node> nodeArray = graph.getNodeArrayClone();
         SolutionTreeNode solutionRoot = null;
-        Node currentNode = null;
-        Node parentNode = null;
+        Node.Connection currentNode = null;
+        Node.Connection parentNode = null;
 
         localQuality = 0;
         totalWeight = 0;
         while(!localSolutionFound) {
             parentNode = currentNode;
-            currentNode = graph.getRandomNode(alpha, beta, minsup, totalWeight, weightLimit);
+            currentNode = graph.getRandomNode(alpha, beta, minsup, totalWeight, weightLimit, index);
 
             int partialWeight = 0;
             int partialQuality = 0;
             if (currentNode != null) {
                 //solutionTreeNode = solutionTreeNode.updateSolutionTree(parentNode, currentNode);
-                partialWeight += currentNode.getWeight();
+                partialWeight += currentNode.getKey().getWeight();
 
-                LinkedList<Node> partialSolution = new LinkedList<>();
+                LinkedList<Node.Connection> partialSolution = new LinkedList<>();
                 partialSolution.addFirst(currentNode);
 
-                BitSet supportCount = currentNode.getTransactionsClone();
+                BitSet supportCount = currentNode.getKey().getTransactionsClone();
                 partialQuality += supportCount.cardinality();
 
                 boolean finished = false;
                 while (!finished) {
-                    currentNode = currentNode.getNextProbableItem(alpha, beta, minsup, totalWeight,
-                            weightLimit, supportCount);//, solutionTreeNode.edgeStates);
+                    parentNode = currentNode;
+                    currentNode = currentNode.getKey().getNextProbableItem(alpha, beta, minsup, totalWeight,
+                            weightLimit, supportCount, index);//, solutionTreeNode.edgeStates);
                     if (currentNode != null) {
-                        supportCount.and(currentNode.getTransactions());
-                        partialQuality += supportCount.cardinality();
-                        partialWeight += currentNode.getWeight();
+                        supportCount.and(currentNode.getKey().getTransactions());
+//                        partialQuality += supportCount.cardinality();
+//                        partialWeight += currentNode.getKey().getWeight();
+                        localQuality += supportCount.cardinality();
+                        totalWeight += currentNode.getKey().getWeight();
                         partialSolution.add(currentNode);
                         //solutionTreeNode = solutionTreeNode.updateSolutionTree(parentNode, currentNode);
                     } else {
                         finished = true;
+
+                        parentNode.antBlockades.set(index);
+
                     }
                 }
-                String key = "";
-                for (Node node :
-                        partialSolution) {
-                    key += node.getAttribute()+",";
-                }
-                if(!localSolution.containsKey(key)){
-                    localSolution.put(key, partialSolution);
-                    totalWeight += partialWeight;
-                    localQuality += partialQuality;
-                }
-                //localSolution.add(partialSolution);
+//                String key = "";
+//                for (Map.Entry<Node, Double> node :
+//                        partialSolution) {
+//                    key += node.getKey().getAttribute()+",";
+//                }
+//                if(!localSolution.containsKey(key)){
+//                    localSolution.put(key, partialSolution);
+//                    totalWeight += partialWeight;
+//                    localQuality += partialQuality;
+//                }
+                localSolution.add(partialSolution);
             }
             else
             {
+                for (LinkedList<Node.Connection> connections :
+                        localSolution) {
+                    for (Node.Connection connection :
+                            connections) {
+                        connection.antBlockades.clear(index);
+                    }
+                }
                 //solutionTreeLeaves.add(solutionTreeNode);
                 //solutionTreeNode.edgeStates.set(parentNode.getIndex());
                 localSolutionFound = true;

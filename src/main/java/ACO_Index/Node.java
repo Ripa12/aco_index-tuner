@@ -14,48 +14,89 @@ import java.util.stream.IntStream;
  * Created by Richard on 2017-12-18.
  */
 public class Node {
+    public static class Connection{
+        Node node;
+        Double pheromone;
+        BitSet antBlockades;
+        public Connection(Node node, Double pheromone, BitSet antBlockades){
+            this.node = node;
+            this.pheromone = pheromone;
+            this.antBlockades = antBlockades;
+        }
+
+        public Node getKey(){
+            return node;
+        }
+
+        public void setValue(double value){
+            pheromone = value;
+        }
+
+        public double getValue(){
+            return pheromone;
+        }
+    }
+
     private static final int WEIGHT = 5; // ToDo: Temporary, should be read from file!
 
-    private ArrayList<Map.Entry<Node, Boolean>> neighbours; // ToDo: Pheromone on every edge instead of node!
+    private ArrayList<Connection> neighbours; // ToDo: Pheromone on every edge instead of node!
 
     private BitSet transactions;
     private String attribute;
     private long supportCount;
 
     private int weight;
-    private double pheromone; // ToDo: Maybe float?
+    //private double pheromone; // ToDo: Maybe float?
 
     private int index;
+    private boolean visited;
 
-    public Node(BitSet transactions, String attribute) {
-        this.weight = WEIGHT; // ToDo: Temporary solution
+//    public Node(BitSet transactions, String attribute) {
+    public Node(int weight, String attribute) {
+        this.weight = weight; // ToDo: Temporary solution
 
-        this.pheromone = 1;
-        this.transactions = transactions;
+        //this.pheromone = 1;
+//        this.transactions = transactions;
+        this.transactions = null;
         this.attribute = attribute;
+        this.visited = false;
 
-        supportCount = transactions.cardinality();
+//        supportCount = transactions.cardinality();
+        supportCount = 0;
 
         neighbours = new ArrayList<>(); // ToDo: Possible to Reserve Memory?
     }
 
-    public Node(BitSet transactions, String attribute, ArrayList<Node> neighbours) {
-        this.weight = WEIGHT; // ToDo: Temporary solution
+//    public Node(BitSet transactions, String attribute, ArrayList<Node> neighbours) {
+    public Node(int nrOfAnts, int weight, String attribute, ArrayList<Node> neighbours) {
+        this.weight = weight; // ToDo: Temporary solution
 
-        this.pheromone = 1;
-        this.transactions = transactions;
+        //this.pheromone = 1;
+//        this.transactions = transactions;
+        this.transactions = null;
         this.attribute = attribute;
+        this.visited = false;
 
-        supportCount = transactions.cardinality();
+//        supportCount = transactions.cardinality();
+        supportCount = 0;
 
         this.neighbours = new ArrayList<>(neighbours.size());
-        neighbours.forEach((n)->this.neighbours.add(new AbstractMap.SimpleEntry<Node, Boolean>(n, true)));
+        neighbours.forEach((n)->this.neighbours.add(new Connection(n, 1.0, new BitSet(nrOfAnts))));
+    }
+
+    public void setTransactions(BitSet transactions){
+        this.transactions = transactions;
+        supportCount = transactions.cardinality();
+    }
+
+    public void unvisit(){
+        this.visited = false;
     }
 
     private void unblockEdges(){
-        for (Map.Entry<Node, Boolean> neighbour:
+        for (Connection neighbour:
         neighbours){
-            neighbour.setValue(true);
+            neighbour.setValue(1.0);
         }
     }
 
@@ -89,20 +130,20 @@ public class Node {
         return supportCount;
     }
 
-    public void connect(Node to) {
+    public void connect(int nrOfAnts, Node to) {
         BitSet difference = ((BitSet) this.transactions.clone());
         difference.and(to.transactions);
         if (difference.cardinality() > 0) {
             if (this.supportCount >= to.supportCount) // ToDo: Check for minimum support between items, maybe?
             {
                 //to.index = neighbours.size();
-                neighbours.add(new AbstractMap.SimpleEntry<>(to, true));
+                neighbours.add(new Connection(to, 1.0, new BitSet(nrOfAnts)));
             } else {
                 //index = to.neighbours.size();
-                to.neighbours.add(new AbstractMap.SimpleEntry<>(this, true));
+                to.neighbours.add(new Connection(this, 1.0, new BitSet(nrOfAnts)));
             }
-
-
+//            neighbours.add(new Connection(to, 1.0));
+//            to.neighbours.add(new Connection(this, 1.0));
         }
     }
 
@@ -118,13 +159,13 @@ public class Node {
     }
 
     // Frequent Item-set
-    public Map.Entry<Node, Boolean> getNextItem(int minsup, BitSet bitset) {
+    public Connection getNextItem(int minsup, BitSet bitset) {
 
-        Map.Entry<Node, Boolean> result = null;
+        Connection result = null;
 
         long maxValue = minsup; // ToDo: Should be minsup
-        for (Map.Entry<Node, Boolean> tempNode : neighbours) {
-            if (tempNode.getValue()) {
+        for (Connection tempNode : neighbours) {
+            if (tempNode.getValue() > 0) {
                 int tempValue = getItemSetFrequency((BitSet) bitset.clone(), tempNode.getKey().transactions);
                 if (tempValue >= maxValue) {
                     maxValue = tempValue;
@@ -142,8 +183,16 @@ public class Node {
         return result;
     }
 
-    public Node getNextProbableItem(double alpha, double beta, int minsup, int currentWeight,
-                                    int weightLimit, BitSet supportCount){//, BitSet edgeStates) {
+//    public Connection getNextProbableItem(double alpha, double beta, int minsup, int currentWeight,
+//                                          int weightLimit, BitSet supportCount){
+//        BitSet identityBitSet = new BitSet(neighbours.size());
+//        //identityBitSet.set(0, neighbours.size(), false);
+//
+//        return getNextProbableItem(alpha, beta, minsup, currentWeight, weightLimit, supportCount, identityBitSet);
+//    }
+
+    public Connection getNextProbableItem(double alpha, double beta, int minsup, int currentWeight,
+                                    int weightLimit, BitSet supportCount, int antIndex){//, BitSet edgeStates) {
         //this.index = -1;
         // Code snippet below taken from http://www.baeldung.com/java-ant-colony-optimization
         ArrayList<Double> probabilities = calculateProbabilities(alpha, beta, minsup, currentWeight, weightLimit, supportCount);
@@ -151,10 +200,12 @@ public class Node {
         double total = 0;
         for (int i = 0; i < neighbours.size(); i++) {
             total += probabilities.get(i);
-            if (total >= rand){// && !edgeStates.get(i)) {
+            if (total >= rand && !neighbours.get(i).antBlockades.get(antIndex)){// && !neighbours.get(i).getKey().visited) {
                 //this.index = i;
+                //edgeStates.set(i);
                 neighbours.get(i).getKey().index = i;
-                return neighbours.get(i).getKey();
+                visited = true;
+                return neighbours.get(i);
             }
         }
 
@@ -169,14 +220,14 @@ public class Node {
         double totalPheromone = 0;
         double sumProbability = 0;
         for(int i = 0; i < probabilities.size(); i++){
-            totalPheromone += Math.pow(neighbours.get(i).getKey().pheromone, alpha);
+            totalPheromone += Math.pow(neighbours.get(i).getValue(), alpha);
             totalHeuristics += Math.pow(probabilities.get(i), beta);
         }
 
         for(int i = 0; i < probabilities.size(); i++){
             // ToDo: Alpha and Beta
             if(weightLimit > (currentWeight + neighbours.get(i).getKey().weight) && probabilities.get(i) > 0) {
-                double tempValue = ((Math.pow(neighbours.get(i).getKey().pheromone, alpha) * Math.pow(probabilities.get(i), beta)) /
+                double tempValue = ((Math.pow(neighbours.get(i).getValue(), alpha) * Math.pow(probabilities.get(i), beta)) /
                         (totalPheromone * totalHeuristics)/neighbours.get(i).getKey().weight);
                 sumProbability += tempValue;
                 probabilities.set(i, (tempValue));
@@ -197,13 +248,14 @@ public class Node {
     private ArrayList<Double> calculateHeuristics(int minsup, BitSet supportCount) {
         ArrayList<Double> heuristics = new ArrayList<>(neighbours.size());
 
-        for (Map.Entry<Node, Boolean> neighbour: neighbours) {
+        for (Connection neighbour: neighbours) {
             double tempValue = (double)getItemSetFrequency((BitSet) supportCount.clone(), neighbour.getKey().transactions);
             heuristics.add(tempValue);
         }
         for(int i = 0; i < heuristics.size(); i++){
             if(heuristics.get(i) >= minsup) {
-                heuristics.set(i, heuristics.get(i) / (weight * weight));
+                // ToDo: accumulated weight + neighbours.get(i).getKey().weight (if necessary)
+                heuristics.set(i, heuristics.get(i) / (Math.pow(neighbours.get(i).getKey().weight, 2)));
             }
             else{
                 heuristics.set(i, 0.0);
@@ -213,16 +265,20 @@ public class Node {
         return heuristics;
     }
 
-    public void increasePheromone(double delta, double maxPheromone, double pheromonePersistence){
-        pheromone = ((pheromonePersistence) * pheromone) + delta;
-        if(pheromone > maxPheromone)
-            pheromone = maxPheromone;
-    }
+//    public void increasePheromone(double delta, double maxPheromone, double pheromonePersistence){
+//        pheromone = ((pheromonePersistence) * pheromone) + delta;
+//        if(pheromone > maxPheromone)
+//            pheromone = maxPheromone;
+//    }
 
     public void evaporatePheromone(double minPheromone, double pheromonePersistence){
-        pheromone = pheromone * (1 - pheromonePersistence);
-        if(pheromone < minPheromone)
-            pheromone = minPheromone;
+        for (Connection connection :
+                neighbours) {
+            connection.setValue(connection.getValue() * (1 - pheromonePersistence));
+            if(connection.getValue() < minPheromone)
+                connection.setValue(minPheromone);
+        }
+
     }
 
     public void printDebugString() {

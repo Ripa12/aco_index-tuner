@@ -1,5 +1,7 @@
 package ACO_Index;
 
+import sun.awt.image.ImageWatched;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class AntColony {
         globalSolution = null;
         
         for (int i = 0; i < nrOfAnts; i++){
-            ants.add(new Ant());
+            ants.add(new Ant(i));
         }
     }
 
@@ -43,10 +45,10 @@ public class AntColony {
     private void updateMinPheromoneLimit(double bestQuality){
         final double pBest = .9; // ToDo: Temporary solution
         // ToDo: PHEROMONE_PERSISTENCE should probably be a local constant
-        minPheromone = (1 - Math.pow(Math.E, Math.log(1/pBest)/graph.getNumberOfNodes())) /
-                ((1-(graph.getNumberOfNodes()/2)))*Math.pow(Math.E, Math.log(pBest));
+//        minPheromone = (1 - Math.pow(Math.E, Math.log(1/pBest)/graph.getNumberOfNodes())) /
+//                ((1-(graph.getNumberOfNodes()/2)))*Math.pow(Math.E, Math.log(pBest));
 
-        //minPheromone = .05;
+        minPheromone = maxPheromone / 10.0;
     }
 
     private void distributeAntPheromones(double bestQuality){
@@ -60,7 +62,7 @@ public class AntColony {
         //boolean finished = false;
 
         // ToDo: Maybe solution should be a tree instead of a LinkedList to avoid duplicate indexes
-        Map<String, LinkedList<Node>> bestLocalSolution = null;
+        LinkedList<LinkedList<Node.Connection>> bestLocalSolution = null;
 
         double solutionQuality = 0;
         Ant bestAnt = null;
@@ -95,10 +97,10 @@ public class AntColony {
 
 //        bestLocalSolution.entrySet().forEach(n -> n.getValue()
 //                .forEach(t -> System.out.println(t.getAttribute())));
-        for(LinkedList<Node> list : bestLocalSolution.values()){
+        for(LinkedList<Node.Connection> list : bestLocalSolution){
             System.out.print("[");
-            for(Node node : list){
-                System.out.print(" " + node.getAttribute() + " ");
+            for(Node.Connection node : list){
+                System.out.print(" " + node.getKey().getAttribute() + " ");
             }
             System.out.println("]");
         }

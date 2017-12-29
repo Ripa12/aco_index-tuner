@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
  */
 
 public class DataSampleGenerator {
-    static void generateDataSample(int nrOfAttr, long nrOfTrans, int transLength, String filename){
+    static void generateDataSample(int nrOfAttr, long nrOfTrans, int transLength, int minWeight, int maxWeight, String filename){
 
         String path = String.valueOf(ClassLoader.getSystemClassLoader().getResource(filename).getPath());
         if (SystemUtils.IS_OS_WINDOWS) {
@@ -28,7 +28,17 @@ public class DataSampleGenerator {
             out = new PrintWriter(new OutputStreamWriter(
                     new BufferedOutputStream(new FileOutputStream(path)), "UTF-8"));
 
-            List<Integer> source = IntStream.rangeClosed(0, nrOfAttr).boxed().collect(Collectors.toList());
+            out.println(nrOfAttr);
+            for(long i = 0; i < nrOfAttr; i++) {
+                String line = "";
+
+                int weight = ThreadLocalRandom.current().nextInt(minWeight, maxWeight + 1);
+
+                line += i + " " + weight;
+                out.println(line);
+            }
+
+            List<Integer> source = IntStream.rangeClosed(0, nrOfAttr-1).boxed().collect(Collectors.toList());
             for(long i = 0; i < nrOfTrans; i++) {
                 String line = "";
 
