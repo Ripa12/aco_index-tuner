@@ -83,7 +83,6 @@ public class AntColony {
             }
 
 
-
             //distributeAntPheromones(solutionQuality);
             if(bestAnt != null) {
                 // Max Pheromone Limit

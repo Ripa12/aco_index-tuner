@@ -189,7 +189,7 @@ public class Graph {
             //resetSkip();
         }
         // Debugging
-        itemsets.forEach(set -> System.out.println(set.toString()));
+        //itemsets.forEach(set -> System.out.println(set.toString()));
         return itemsets.stream().map(s->s.getValue()).collect(Collectors.toList());
     }
 

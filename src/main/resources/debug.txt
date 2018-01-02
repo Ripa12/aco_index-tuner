@@ -1,17 +1,17 @@
 GA
 ------
-Total quality: 463914 Total weight: 152980
+Total quality: 94521 Total weight: 994
 Total time: 9.408316954
 ------
 
 ACO
 ------
-Quality: 96118.0
-Weight: 99966
+Quality: 101478.0
+Weight: 999
 ------
 
 DP
 ------
-Quality: 272079
-Total time: 9.241140591
+Quality: 111373
+Total time: 0.231438676
 ------

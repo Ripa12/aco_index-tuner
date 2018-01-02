@@ -1,8 +1,10 @@
 package ACO_Index.DP;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 // A Dynamic Programming based solution for 0-1 Knapsack problem
 public class DynamicProgramming {
@@ -10,6 +12,66 @@ public class DynamicProgramming {
     // A utility function that returns maximum of two integers
     static int max(int a, int b) {
         return (a > b) ? a : b;
+    }
+    // https://introcs.cs.princeton.edu/java/23recursion/Knapsack.java.html
+    public static void calcSolution(List<Map.Entry<Integer, Integer>> data, int capacity){
+        int N = data.size();   // number of items
+        int W = capacity;   // maximum weight of knapsack
+
+        int[] profit = new int[N+1];
+        int[] weight = new int[N+1];
+
+        // generate random instance, items 1..N
+        for (int n = 1; n <= N; n++) {
+            profit[n] = data.get(n-1).getKey();
+            weight[n] = data.get(n-1).getValue();
+        }
+
+        // opt[n][w] = max profit of packing items 1..n with weight limit w
+        // sol[n][w] = does opt solution to pack items 1..n with weight limit w include item n?
+        int[][] opt = new int[N+1][W+1];
+        boolean[][] sol = new boolean[N+1][W+1];
+
+        for (int n = 1; n <= N; n++) {
+            for (int w = 1; w <= W; w++) {
+
+                // don't take item n
+                int option1 = opt[n-1][w];
+
+                // take item n
+                int option2 = Integer.MIN_VALUE;
+                if (weight[n] <= w) option2 = profit[n] + opt[n-1][w-weight[n]];
+
+                // select better of two options
+                opt[n][w] = Math.max(option1, option2);
+                sol[n][w] = (option2 > option1);
+            }
+        }
+
+        // determine which items to take
+        boolean[] take = new boolean[N+1];
+        for (int n = N, w = W; n > 0; n--) {
+            if (sol[n][w]) {
+                take[n] = true;
+                w = w - weight[n];
+            }
+            else {
+                take[n] = false;
+            }
+        }
+
+
+        int totalProfit = 0;
+        int totalWeight = 0;
+        // print results
+        System.out.println("item" + "\t" + "profit" + "\t" + "weight" + "\t" + "take");
+        for (int n = 1; n <= N; n++) {
+            totalProfit += take[n] ? profit[n] : 0;
+            totalWeight += take[n] ? weight[n] : 0;
+            System.out.println(n + "\t" + profit[n] + "\t" + weight[n] + "\t" + take[n]);
+        }
+        System.out.println("Total profit: " + totalProfit);
+        System.out.println("Total weight: " + totalWeight);
     }
 
     // Returns the maximum value that can be put in a knapsack of capacity W

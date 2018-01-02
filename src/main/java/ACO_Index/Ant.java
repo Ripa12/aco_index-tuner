@@ -101,14 +101,10 @@ public class Ant {
         localQuality = 0;
         totalWeight = 0;
         while(!localSolutionFound) {
-            parentNode = currentNode;
             currentNode = graph.getRandomNode(alpha, beta, minsup, totalWeight, weightLimit, index);
 
-            int partialWeight = 0;
             int partialQuality = 0;
             if (currentNode != null) {
-                //solutionTreeNode = solutionTreeNode.updateSolutionTree(parentNode, currentNode);
-//                partialWeight += currentNode.getKey().getWeight();
                 totalWeight += currentNode.getKey().getWeight();
 
                 LinkedList<Node.Connection> partialSolution = new LinkedList<>();
@@ -125,11 +121,8 @@ public class Ant {
                     if (currentNode != null) {
                         supportCount.and(currentNode.getKey().getTransactions());
                         partialQuality += supportCount.cardinality();
-//                        partialWeight += currentNode.getKey().getWeight();
-                        //localQuality += supportCount.cardinality();
                         totalWeight += currentNode.getKey().getWeight();
                         partialSolution.add(currentNode);
-                        //solutionTreeNode = solutionTreeNode.updateSolutionTree(parentNode, currentNode);
                     } else {
                         finished = true;
 
