@@ -29,12 +29,14 @@ public class DataSampleGenerator {
                     new BufferedOutputStream(new FileOutputStream(path)), "UTF-8"));
 
             out.println(nrOfAttr);
+            int nrOfTransHalf = (int)nrOfTrans/1000;
             for(long i = 0; i < nrOfAttr; i++) {
                 String line = "";
 
                 int weight = ThreadLocalRandom.current().nextInt(minWeight, maxWeight + 1);
+                int writeToRead = ThreadLocalRandom.current().nextInt(0, nrOfTransHalf + 1);
 
-                line += i + " " + weight;
+                line += i + " " + weight + " " + writeToRead;
                 out.println(line);
             }
 

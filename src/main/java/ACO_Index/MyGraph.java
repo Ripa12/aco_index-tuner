@@ -7,37 +7,50 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Richard on 2017-12-30.
  */
 public class MyGraph {
+    private static final int NUMBER_OF_OBJECTIVES = 2;
+
     private int capacity;
     private int nrOfNodes;
     private double[] weights;
     private double[] profits;
+    private double[] writes;
     //private boolean[][] edges;
-    private double[][] pheromoneMatrix; // ToDo: Maybe put in Node class instead!
+    //private double[][] pheromoneMatrix; // ToDo: Maybe put in Node class instead!
+    private double[][][] pheromoneMatrices; // ToDo: Maybe put in Node class instead!
     private BitSet[] transactionMatrix;
 
     private double profitR;
+    private double writesR;
     private double weightR;
-    public MyGraph(List<Map.Entry<Integer, Integer>> data, int cap){
+    public MyGraph(List<Graph.ItemSet> data, int cap){
         nrOfNodes = data.size();
 
-        this.pheromoneMatrix = new double[nrOfNodes][nrOfNodes];
-        resetPheromoneMatrix(0.0);
+        this.pheromoneMatrices = new double[NUMBER_OF_OBJECTIVES][nrOfNodes][nrOfNodes];
+        resetPheromoneMatrix(0, 0.0);
+        resetPheromoneMatrix(1, 0.0);
 
+        this.writes=new double[nrOfNodes];
         this.profits=new double[nrOfNodes];
         this.weights=new double[nrOfNodes];
         for (int i = 0; i < nrOfNodes; i++){
             this.profits[i]=(data.get(i).getKey());
             this.weights[i]=(data.get(i).getValue());
-
+            this.writes[i]=(data.get(i).getWriteToRead());
         }
         this.capacity = cap;
 
+//        this.writesR = Arrays.stream(writes).reduce(Double::max).getAsDouble();
+        this.writesR = Arrays.stream(writes).reduce(Double::max).getAsDouble();
         this.profitR = Arrays.stream(profits).reduce(Double::sum).getAsDouble();
         this.weightR = Arrays.stream(weights).reduce(Double::sum).getAsDouble();
     }
 
     public double getTotalProfit(){
         return profitR;
+    }
+
+    public double getTotalWrites(){
+        return writesR;
     }
 
     public int getRandomPosition(){
@@ -48,8 +61,8 @@ public class MyGraph {
         return nrOfNodes;
     }
 
-    public double getPheromone(int from, int to){
-        return pheromoneMatrix[from][to];
+    public double getPheromone(int index, int from, int to){
+        return pheromoneMatrices[index][from][to];
     }
 
     public BitSet getHeuristic(BitSet bitSet, int index){
@@ -66,9 +79,14 @@ public class MyGraph {
         return weights[index];
     }
 
-    public void resetPheromoneMatrix(double value){
-        for (double[] row: this.pheromoneMatrix)
-            Arrays.fill(row, value);
+    public double getWrites(int index) {
+        return writes[index];
+    }
+
+    public void resetPheromoneMatrix(int objIndex, double value){
+        //for(int i = 0; i < this.pheromoneMatrices.length; i++)
+            for (double[] row: this.pheromoneMatrices[objIndex])
+                Arrays.fill(row, value);
     }
 
     public void pruneNeighbours(List<Integer> neighbour, int capacity, double currentWeight){
@@ -85,48 +103,36 @@ public class MyGraph {
         return neighbours;
     }
 
-    public void evaporatePheromones(double pheromonePersistence, double max){
-        for (int i = 0; i < nrOfNodes; i++) {
-            for (int j = i; j < nrOfNodes; j++) {
-                pheromoneMatrix[i][j] = (1.0 - pheromonePersistence) * pheromoneMatrix[i][j];
-                pheromoneMatrix[i][j] = Math.min(pheromoneMatrix[i][j], max);
-                pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
+    public void evaporatePheromones(int objIndex, double pheromonePersistence, double max){
+
+            for (int i = 0; i < nrOfNodes; i++) {
+                for (int j = i; j < nrOfNodes; j++) {
+                    pheromoneMatrices[objIndex][i][j] = (1.0 - pheromonePersistence) * pheromoneMatrices[objIndex][i][j];
+                    pheromoneMatrices[objIndex][i][j] = Math.min(pheromoneMatrices[objIndex][i][j], max);
+                    pheromoneMatrices[objIndex][j][i] = pheromoneMatrices[objIndex][i][j];
+                }
             }
-        }
+
     }
 
-    public void updatePheromoneMatrix(List<Integer> solution, double solutionQuality, double min){
+    public void updatePheromoneMatrix(int objective, List<Integer> solution, double solutionQuality, double min){
+
+        double factor = 0;
+
+        // toDo: Temporary solution, should be moved somewhere else!
+        if(objective == 0){
+            factor = (solutionQuality / profitR);
+        }
+        else{
+            factor = ((writesR - solutionQuality) / writesR);
+        }
+
         for (int i : solution) {
             for (int j = 0; j < nrOfNodes; j++) {
-//                if (i != j) {
-                    // Do Evaporation
-//                    pheromoneMatrix[i][j]=(1.0 - pheromonePersistence) * pheromoneMatrix[i][j];
-//                    pheromoneMatrix[i][j] = Math.min(pheromoneMatrix[i][j], max);
-//                    pheromoneMatrix[j][i]=pheromoneMatrix[i][j];
-                    // Do Deposit
-
-
-                    pheromoneMatrix[i][j] = pheromoneMatrix[i][j] + 1 * (solutionQuality / profitR);
-                    pheromoneMatrix[i][j] = Math.max(pheromoneMatrix[i][j], min);
-                    pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
-                    //graph.setTau(i, j, deposit.getTheNewValue(i, j));
-                    //graph.setTau(j, i, graph.getTau(i, j));
-
-//                }
+                    pheromoneMatrices[objective][i][j] = pheromoneMatrices[objective][i][j] + 1 * factor;
+                    pheromoneMatrices[objective][i][j] = Math.max(pheromoneMatrices[objective][i][j], min);
+                    pheromoneMatrices[objective][j][i] = pheromoneMatrices[objective][i][j];
             }
         }
     }
-
-//    public void limitPheromoneMatrix(double max, double min){
-//        for (int i = 0; i < nrOfNodes; i++) {
-//            for (int j = i; j < nrOfNodes; j++) {
-//                if (i != j) {
-//                    pheromoneMatrix[i][j] = Math.min(pheromoneMatrix[i][j], max);
-//                    pheromoneMatrix[i][j] = Math.max(pheromoneMatrix[i][j], min);
-//                    pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
-//                }
-//            }
-//        }
-//    }
-
 }

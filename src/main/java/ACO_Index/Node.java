@@ -44,6 +44,7 @@ public class Node {
     private BitSet transactions;
     private String attribute;
     private long supportCount;
+    private int writeToRead;
 
     private int weight;
     //private double pheromone; // ToDo: Maybe float?
@@ -52,8 +53,9 @@ public class Node {
     private boolean visited;
 
 //    public Node(BitSet transactions, String attribute) {
-    public Node(int weight, String attribute) {
+    public Node(int writeToRead, int weight, String attribute) {
         this.weight = weight; // ToDo: Temporary solution
+        this.writeToRead = writeToRead;
 
         //this.pheromone = 1;
 //        this.transactions = transactions;
@@ -68,8 +70,9 @@ public class Node {
     }
 
 //    public Node(BitSet transactions, String attribute, ArrayList<Node> neighbours) {
-    public Node(int nrOfAnts, int weight, String attribute, ArrayList<Node> neighbours) {
+    public Node(int nrOfAnts, int writeToRead, int weight, String attribute, ArrayList<Node> neighbours) {
         this.weight = weight; // ToDo: Temporary solution
+        this.writeToRead = writeToRead;
 
         //this.pheromone = 1;
 //        this.transactions = transactions;
@@ -112,6 +115,10 @@ public class Node {
 
     public int getWeight(){
         return weight;
+    }
+
+    public int getWriteToRead() {
+        return writeToRead;
     }
 
     public BitSet getTransactionsClone() {

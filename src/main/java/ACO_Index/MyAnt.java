@@ -11,14 +11,11 @@ import static com.google.common.base.Preconditions.checkState;
  * Created by Richard on 2017-12-30.
  */
 public class MyAnt {
-    private BitSet[] blockages;
-    private BitSet supportCount;
     private int index;
-    private double quality;
+    private double supportCountQuality;
+    private double writesQuality;
     private MyGraph graph;
     private List<Integer> solution;
-
-    //public int[][] path;
 
     private int currentPosition;
 
@@ -33,17 +30,21 @@ public class MyAnt {
         return solution;
     }
 
-    public double getSolutionQuality(){
-        return quality;
+    public double getSolutionSupportCountQuality(){
+        return supportCountQuality;
+    }
+
+    public double getSolutionWritesQuality(){
+        return writesQuality;
     }
 
     public int getIndex(){
         return index;
     }
 
-    public BitSet getSupportCount(){
-        return supportCount;
-    }
+//    public BitSet getSupportCount(){
+//        return supportCount;
+//    }
 
     public void findSolution(int capacity, double alpha, double beta){
 
@@ -51,59 +52,107 @@ public class MyAnt {
 
         currentPosition = graph.getRandomPosition();
         solution.add(currentPosition);
-        quality = graph.getProfit(currentPosition);
+        writesQuality = graph.getWrites(currentPosition);
+        supportCountQuality = graph.getProfit(currentPosition);
         double currentWeight = graph.getWeight(currentPosition);
-
-        //path = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];
-
 
         List<Integer> neighbours = graph.getNeighbours(currentPosition, capacity, currentWeight);
 
         while (neighbours.size()>0){
-            int nextPosition = getNextItem(neighbours.size(), currentPosition, alpha, beta);
+//            int nextPosition = getNextItem(neighbours.size(), currentPosition, alpha, beta);
+            int nextPosition = getNextItem(neighbours, Math.random() < 0.5 ? 0 : 1, alpha, beta);
+            //int nextPosition = getNextItem(neighbours, 0, alpha, beta);
 
             neighbours.remove(nextPosition);
-
-//            path[currentPosition][nextPosition] = 1;
-//            path[nextPosition][currentPosition] = 1;
 
             graph.pruneNeighbours(neighbours, capacity, currentWeight);
 
             currentPosition = nextPosition;
             solution.add(nextPosition);
-            quality += graph.getProfit(nextPosition);
+            supportCountQuality += graph.getProfit(nextPosition);
+            writesQuality += graph.getWrites(nextPosition);
             currentWeight += graph.getWeight(nextPosition);
         }
 
     }
 
-    private int getNextItem(int nrOfNodes, int index, double alpha, double beta){
+    private double calculateWriteHeuristic(int i){
+//        double debTotalwrites = graph.getTotalWrites();
+//        double debWrites = graph.getWrites(index);
+//        double weight = graph.getWeight(i);
+        return ((graph.getTotalWrites() - graph.getWrites(index))/graph.getWeight(i));
+    }
 
-        //int nrOfNodes = graph.getNumberOfNodes();
+    private double calculateSupportHeuristic(int i){
+//        double debProfit = graph.getProfit(index);
+//        double weight = graph.getWeight(i);
+        return graph.getProfit(index)/graph.getWeight(i);
+    }
+
+    // ToDo: Move to MyAbstractObjective!
+    private double calculateAggregateProbabilities(double[] probability, int objective, int nrOfNodes,
+                                                  double alpha, double beta){
         double[] tij = new double[nrOfNodes];
-        double[] nij = new double[nrOfNodes];
+        double[][] nij = new double[2][nrOfNodes]; // This is the reason why it took so long!
+//        double[] nij = new double[nrOfNodes];
 
-        double total = 0;
+        double scTotal = 0;
+        double wTotal = 0;
 
         // nodes to visit
         for (int i = 0; i < nrOfNodes; i++){
-            tij[i] = Math.pow(graph.getPheromone(index, i), alpha);
-            //double heuristic = graph.getHeuristic(supportCount, i).cardinality()/graph.getWeight(i);
-            double heuristic = graph.getProfit(index)/graph.getWeight(i);
-            nij[i] = Math.pow(heuristic, beta);
+            tij[i] = Math.pow(graph.getPheromone(objective, index, i), alpha);
+            nij[0][i] = Math.pow(calculateSupportHeuristic(i), beta);
+            nij[1][i] = Math.pow(calculateWriteHeuristic(i), beta);
 
-            total += tij[i] * nij[i];
+            scTotal += tij[i] * nij[0][i];
+            wTotal += tij[i] * nij[1][i];
         }
-
-        double[] probability = new double[nrOfNodes];
 
         double sumProbability = 0.0;
 
         for (int i = 0; i < nrOfNodes; i++){
-            probability[i] = (tij[i] * nij[i]) / total;
+            probability[i] = ((tij[i] * nij[0][i]) / scTotal) + ((tij[i] * nij[1][i]) / wTotal);
 
             sumProbability += probability[i];
         }
+
+        return sumProbability;
+    }
+
+
+
+    // ToDo: Pass MyAbstractObjective instance as parameter
+    private int getNextItem(List<Integer> neighbours, int indexObj, double alpha, double beta){
+
+        //int nrOfNodes = graph.getNumberOfNodes();
+//        double[] tij = new double[nrOfNodes];
+//        double[] nij = new double[nrOfNodes];
+//
+//        double total = 0;
+        //total += calculateSupportHeuristics(tij, nij, nrOfNodes, alpha, beta);
+
+
+//        // nodes to visit
+//        for (int i = 0; i < nrOfNodes; i++){
+//            tij[i] = Math.pow(graph.getPheromone(index, i), alpha);
+//            //double heuristic = graph.getHeuristic(supportCount, i).cardinality()/graph.getWeight(i);
+//            double heuristic = graph.getProfit(index)/graph.getWeight(i);
+//            nij[i] = Math.pow(heuristic, beta);
+//
+//            total += tij[i] * nij[i];
+//        }
+
+        double[] probability = new double[neighbours.size()];
+        double sumProbability = calculateAggregateProbabilities(probability, indexObj, neighbours.size(), alpha, beta);
+
+//        double sumProbability = 0.0;
+//
+//        for (int i = 0; i < nrOfNodes; i++){
+//            probability[i] = (tij[i] * nij[i]) / total;
+//
+//            sumProbability += probability[i];
+//        }
 
         int j = 0;
 

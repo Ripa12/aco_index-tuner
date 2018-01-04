@@ -15,6 +15,41 @@ import java.util.stream.Stream;
  * Created by Richard on 2017-12-18.
  */
 public class Graph {
+    public class ItemSet{
+        private int weight;
+        private int supportCount;
+        private int writeToRead;
+        private List<String> attributes;
+
+        public ItemSet(int weight, int supportCount, int writeToRead){
+            this.supportCount = supportCount;
+            this.weight = weight;
+            this.writeToRead = writeToRead;
+            this.attributes = new LinkedList<>();
+        }
+
+        public ItemSet(int weight, int supportCount, int writeToRead, List<String> attributes){
+            this.supportCount = supportCount;
+            this.weight = weight;
+            this.writeToRead = writeToRead;
+            this.attributes = attributes;
+        }
+
+        public int getKey(){
+            return supportCount;
+        }
+        public int getValue(){
+            return weight;
+        }
+        public int getWriteToRead(){
+            return writeToRead;
+        }
+        public void add(String a){
+            this.attributes.add(a);
+        }
+
+    }
+
     private ArrayList<Node> nodes;
     Node root;
 
@@ -75,7 +110,7 @@ public class Graph {
             nodes = new ArrayList<>(nrOfAttributes);
             for (int i = 0; i < nrOfAttr; i++){
                 String[] strArr = lineIt.next().split("\\s+");
-                nodes.add(i, new Node(Integer.parseInt(strArr[1]), strArr[0]));
+                nodes.add(i, new Node(Integer.parseInt(strArr[2]), Integer.parseInt(strArr[1]), strArr[0]));
             }
             lineIt.forEachRemaining(new Consumer<String>() {
                 long entry = 1;
@@ -96,7 +131,7 @@ public class Graph {
         BitSet tempBitSet = connections.get(0).getTransactionsClone();
         tempBitSet.set(0, tempBitSet.length(), true);
 
-        Node root = new Node(nrOfAnts, 0, "root", connections);
+        Node root = new Node(nrOfAnts, 0, 0, "root", connections);
         root.setTransactions(tempBitSet);
 
         return new Graph(connections, root);
@@ -143,8 +178,8 @@ public class Graph {
 
 
 //    public void debugFrequentItemSets(int minsup) {
-    public List<Map.Entry<Integer, Integer>> debugFrequentItemSets(int minsup) {
-        LinkedList<Map.Entry<LinkedList<String>, Map.Entry<Integer, Integer>>> itemsets = new LinkedList<>();
+    public List<ItemSet> debugFrequentItemSets(int minsup) {
+        LinkedList<ItemSet> itemsets = new LinkedList<>();
 
         for (Node node: nodes) {
             boolean itemsetsComplete = false;
@@ -157,6 +192,7 @@ public class Graph {
                 BitSet supportCount = currentNode.getKey().getTransactionsClone();
                 int quality = supportCount.cardinality();
                 int totalWeight = currentNode.getKey().getWeight();
+                int TotalWriteToRead =  currentNode.getKey().getWriteToRead();
 
                 boolean itemsetComplete = false;
                 while (!itemsetComplete) {
@@ -167,6 +203,7 @@ public class Graph {
                         supportCount.and(currentNode.getKey().getTransactions());
                         quality += supportCount.cardinality();
                         totalWeight += currentNode.getKey().getWeight();
+                        TotalWriteToRead += currentNode.getKey().getWriteToRead();
                     } else {
                         itemsetComplete = true;
                         lastEdge.setValue(0.0);
@@ -174,14 +211,16 @@ public class Graph {
                 }
                 if(!itemset.isEmpty()) {
                     itemset.addFirst(node.getAttribute());
-                    itemsets.add(new AbstractMap.SimpleEntry<LinkedList<String>, Map.Entry<Integer, Integer>>(itemset,
-                    new AbstractMap.SimpleEntry<Integer, Integer>(quality, totalWeight)));
+                    itemsets.add(new ItemSet(totalWeight, quality, TotalWriteToRead, itemset));
+//                    itemsets.add(new AbstractMap.SimpleEntry<LinkedList<String>, ItemSet>(itemset,
+//                    new AbstractMap.SimpleEntry<Integer, Integer>(quality, totalWeight)));
                 }
                 else{
                     if(node.getSupportCount() >= minsup) {
                         itemset.add(node.getAttribute());
-                        itemsets.add(new AbstractMap.SimpleEntry<LinkedList<String>, Map.Entry<Integer, Integer>>(itemset,
-                                new AbstractMap.SimpleEntry<Integer, Integer>(quality, totalWeight)));
+                        itemsets.add(new ItemSet(totalWeight, quality, TotalWriteToRead, itemset));
+//                        itemsets.add(new AbstractMap.SimpleEntry<LinkedList<String>, ItemSet>(itemset,
+//                                new AbstractMap.SimpleEntry<Integer, Integer>(quality, totalWeight)));
                     }
                     itemsetsComplete = true;
                 }
@@ -190,7 +229,8 @@ public class Graph {
         }
         // Debugging
         //itemsets.forEach(set -> System.out.println(set.toString()));
-        return itemsets.stream().map(s->s.getValue()).collect(Collectors.toList());
+//        return itemsets.stream().map(s->s.getValue()).collect(Collectors.toList());
+        return itemsets;
     }
 
 }

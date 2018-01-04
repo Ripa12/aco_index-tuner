@@ -2,16 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="41801844-e23e-4530-bc9f-fc5b86c73558" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/MyAbstractObjective.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/MyObjective.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/ACO_Index/App.class" afterPath="$PROJECT_DIR$/target/classes/ACO_Index/App.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ACO_Index-Tuner.iml" afterPath="$PROJECT_DIR$/ACO_Index-Tuner.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/Ant.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/Ant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/AntColony.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/AntColony.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/App.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/App.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/DP/DynamicProgramming.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/DP/DynamicProgramming.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/DataSampleGenerator.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/DataSampleGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/GA/GeneticAlgorithm.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/GA/GeneticAlgorithm.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/debug.txt" afterPath="$PROJECT_DIR$/src/main/resources/debug.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/MyGraph.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/MyGraph.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ACO_Index/Node.java" afterPath="$PROJECT_DIR$/src/main/java/ACO_Index/Node.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,30 +30,16 @@
       <file leaf-file-name="MyGraph.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="651">
-              <caret line="31" column="9" lean-forward="false" selection-start-line="31" selection-start-column="9" selection-end-line="31" selection-end-column="9" />
+            <state relative-caret-position="2310">
+              <caret line="121" column="65" lean-forward="false" selection-start-line="121" selection-start-column="65" selection-end-line="121" selection-end-column="65" />
               <folding>
-                <element signature="e#1168#1169#0" expanded="false" />
-                <element signature="e#1198#1199#0" expanded="false" />
-                <element signature="e#1235#1236#0" expanded="false" />
-                <element signature="e#1307#1308#0" expanded="false" />
-                <element signature="e#1343#1344#0" expanded="false" />
-                <element signature="e#1375#1376#0" expanded="false" />
-                <element signature="e#1426#1427#0" expanded="false" />
-                <element signature="e#1474#1475#0" expanded="false" />
-                <element signature="e#1781#1782#0" expanded="false" />
-                <element signature="e#1818#1819#0" expanded="false" />
+                <element signature="e#1683#1684#0" expanded="true" />
+                <element signature="e#1713#1714#0" expanded="true" />
+                <element signature="e#1750#1751#0" expanded="true" />
+                <element signature="e#1780#1781#0" expanded="true" />
+                <element signature="e#2019#2020#0" expanded="true" />
+                <element signature="e#2076#2077#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MyObjective.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyObjective.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -58,12 +47,73 @@
       <file leaf-file-name="MyAntColony.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1386">
-              <caret line="68" column="14" lean-forward="false" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+            <state relative-caret-position="-987">
+              <caret line="76" column="23" lean-forward="false" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
               <folding>
-                <element signature="e#1751#1752#0" expanded="false" />
-                <element signature="e#1809#1810#0" expanded="false" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/App.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1008">
+              <caret line="51" column="16" lean-forward="false" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GeneticAlgorithm.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/GA/GeneticAlgorithm.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="84">
+              <caret line="36" column="52" lean-forward="false" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MyAbstractObjective.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAbstractObjective.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColonyManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ColonyManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="546">
+              <caret line="52" column="3" lean-forward="false" selection-start-line="52" selection-start-column="3" selection-end-line="52" selection-end-column="76" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Graph.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-512">
+              <caret line="112" column="0" lean-forward="false" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MyAnt.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="903">
+              <caret line="134" column="0" lean-forward="true" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -79,13 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>[0, 4]</find>
-      <find>[0, 3, 4, 5]</find>
-      <find>607.*165|165.*607</find>
-      <find>356.*686|686.*356</find>
-      <find>314.*231|231.*314</find>
-      <find>314</find>
-      <find>[314, 350, 231, 0, 248, 380, 78]</find>
       <find>2, 7, 10</find>
       <find>[0, 1, 5, 2]</find>
       <find>314.*248|248.*314</find>
@@ -109,6 +152,13 @@
       <find>LOGGER.info</find>
       <find>LOGGER.debug</find>
       <find>antLocalUpdate</find>
+      <find>Map.Entry&lt;Integer, Integer</find>
+      <find>weights</find>
+      <find>supportCountQuality</find>
+      <find>writesQuality</find>
+      <find>totalWeight</find>
+      <find>data</find>
+      <find>out.</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,24 +172,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/GA/Genetic.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/Aco.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/debug.txt" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyNode.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/AntColony.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/App.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractAntExploration.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractAntInitialization.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractAntSelection.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractDaemonActions.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractDeposit.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractEvaporation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractGlobalUpdateRule.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractGraphInitialization.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractLocalUpdateRule.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractManyAnts.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractRule.java" />
@@ -170,9 +202,27 @@
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/RouletteWheel.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/UpdatePheromoneMatrix.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/UpdateTMinAndTMaxValues.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyGraph.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyPheromones.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ParetoSolutions.java" />
         <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyObjective.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/Pareto.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/SupportObjective.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColonyBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/Node.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/DP/DynamicProgramming.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/DataSampleGenerator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/Solution.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/Knapsack.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyAbstractObjective.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyPheromone.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MySupportObjective.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/ColonyManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyGraph.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/GA/GeneticAlgorithm.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ACO_Index/App.java" />
       </list>
     </option>
   </component>
@@ -200,6 +250,7 @@
     <panes>
       <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -402,7 +453,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -726,31 +776,31 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1787176" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.372442" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2475" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21418826" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.47885403" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3287858" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -773,13 +823,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ACO_Index/GA/GeneticAlgorithm.java</url>
-          <line>528</line>
+          <line>530</line>
           <properties />
           <option name="timeStamp" value="140" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java</url>
-          <line>191</line>
+          <line>230</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -792,7 +842,7 @@
           <option name="timeStamp" value="184" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="203" />
+      <option name="time" value="231" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -801,80 +851,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/debug.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="13" column="6" lean-forward="true" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_74/src.zip!/java/lang/Thread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="695" column="29" lean-forward="false" selection-start-line="695" selection-start-column="29" selection-end-line="695" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_74/src.zip!/java/util/Observable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="131" column="16" lean-forward="false" selection-start-line="131" selection-start-column="16" selection-end-line="131" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyNode.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2331">
-          <caret line="139" column="12" lean-forward="false" selection-start-line="139" selection-start-column="12" selection-end-line="139" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="125" column="36" lean-forward="false" selection-start-line="125" selection-start-column="36" selection-end-line="125" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="73" column="0" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/DP/DynamicProgramming.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/AntColony.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-364">
-          <caret line="82" column="13" lean-forward="false" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/App.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="41" column="8" lean-forward="false" selection-start-line="41" selection-start-column="8" selection-end-line="42" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractAntExploration.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractAntInitialization.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractAntSelection.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractDaemonActions.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractDeposit.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractEvaporation.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractGlobalUpdateRule.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractGraphInitialization.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractLocalUpdateRule.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractManyAnts.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractRule.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/AbstractSingleAnt.java" />
@@ -904,40 +880,199 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/RouletteWheel.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/UpdatePheromoneMatrix.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ALT_ACO/UpdateTMinAndTMaxValues.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java">
+    <entry file="file://$PROJECT_DIR$/../pareto.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1386">
-          <caret line="68" column="14" lean-forward="false" selection-start-line="68" selection-start-column="14" selection-end-line="68" selection-end-column="14" />
+        <state relative-caret-position="21">
+          <caret line="116" column="5" lean-forward="false" selection-start-line="116" selection-start-column="5" selection-end-line="116" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Ant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColonyBuilder.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Pareto.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/AntColony.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_74/src.zip!/java/lang/Integer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="51" column="19" lean-forward="false" selection-start-line="51" selection-start-column="19" selection-end-line="51" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/DP/DynamicProgramming.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="139" column="36" lean-forward="false" selection-start-line="139" selection-start-column="36" selection-end-line="139" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/GA/Genetic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1428">
+          <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
           <folding>
-            <element signature="e#1751#1752#0" expanded="false" />
-            <element signature="e#1809#1810#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Graph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-512">
+          <caret line="112" column="0" lean-forward="false" selection-start-line="112" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2037">
+          <caret line="120" column="27" lean-forward="false" selection-start-line="120" selection-start-column="27" selection-end-line="120" selection-end-column="27" />
+          <folding>
+            <element signature="e#3285#3286#0" expanded="false" />
+            <element signature="e#3319#3320#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Solution.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="21" column="24" lean-forward="false" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
+          <folding>
+            <element signature="e#309#310#0" expanded="true" />
+            <element signature="e#340#341#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAbstractObjective.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyPheromone.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+          <folding>
+            <element signature="e#529#530#0" expanded="true" />
+            <element signature="e#577#578#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/Knapsack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="244">
+          <caret line="21" column="4" lean-forward="true" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/DataSampleGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="31" column="49" lean-forward="false" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MySupportObjective.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="8" column="4" lean-forward="false" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
+          <folding>
+            <element signature="e#173#174#0" expanded="true" />
+            <element signature="e#201#202#0" expanded="true" />
+            <element signature="e#462#463#0" expanded="true" />
+            <element signature="e#486#487#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyGraph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="31" column="9" lean-forward="false" selection-start-line="31" selection-start-column="9" selection-end-line="31" selection-end-column="9" />
+        <state relative-caret-position="2310">
+          <caret line="121" column="65" lean-forward="false" selection-start-line="121" selection-start-column="65" selection-end-line="121" selection-end-column="65" />
           <folding>
-            <element signature="e#1168#1169#0" expanded="false" />
-            <element signature="e#1198#1199#0" expanded="false" />
-            <element signature="e#1235#1236#0" expanded="false" />
-            <element signature="e#1307#1308#0" expanded="false" />
-            <element signature="e#1343#1344#0" expanded="false" />
-            <element signature="e#1375#1376#0" expanded="false" />
-            <element signature="e#1426#1427#0" expanded="false" />
-            <element signature="e#1474#1475#0" expanded="false" />
-            <element signature="e#1781#1782#0" expanded="false" />
-            <element signature="e#1818#1819#0" expanded="false" />
+            <element signature="e#1683#1684#0" expanded="true" />
+            <element signature="e#1713#1714#0" expanded="true" />
+            <element signature="e#1750#1751#0" expanded="true" />
+            <element signature="e#1780#1781#0" expanded="true" />
+            <element signature="e#2019#2020#0" expanded="true" />
+            <element signature="e#2076#2077#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyObjective.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAnt.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="903">
+          <caret line="134" column="0" lean-forward="true" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/ColonyManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="52" column="3" lean-forward="false" selection-start-line="52" selection-start-column="3" selection-end-line="52" selection-end-column="76" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/GA/GeneticAlgorithm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="36" column="52" lean-forward="false" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/MyAntColony.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-987">
+          <caret line="76" column="23" lean-forward="false" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ACO_Index/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1008">
+          <caret line="51" column="16" lean-forward="false" selection-start-line="51" selection-start-column="16" selection-end-line="51" selection-end-column="16" />
           <folding />
         </state>
       </provider>

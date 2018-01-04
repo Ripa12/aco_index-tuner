@@ -16,6 +16,8 @@ package ACO_Index.GA;
  */
 
 
+import ACO_Index.Graph;
+
 import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,10 +31,10 @@ import java.util.Random;
 
 public class GeneticAlgorithm {
 
-    private List<Map.Entry<Integer, Integer>> data;
+    private List<Graph.ItemSet> data;
 
     private static final int POPULATION_SIZE = 500;
-    private static final int MAXIMUM_GENERATIONS = 1000;
+    private static final int MAXIMUM_GENERATIONS = 2000;
     private static final double PROB_CROSSOVER = .3;
     private static final double PROB_MUTATION = .05;
 
@@ -94,7 +96,7 @@ public class GeneticAlgorithm {
     /**
      * Default constructor
      */
-    public GeneticAlgorithm(List<Map.Entry<Integer, Integer>> data, int capacity) {
+    public GeneticAlgorithm(List<Graph.ItemSet> data, int capacity) {
 
         this.data = data;
 
@@ -119,39 +121,39 @@ public class GeneticAlgorithm {
         this.makePopulation();
 
         // Start printing out summary
-        System.out.println("\nInitial Generation:");
-        System.out.println("===================");
-        System.out.println("Population:");
-        for(int i = 0; i < this.population_size; i++) {
-            System.out.println((i + 1) + " - " + this.population.get(i));
-        }
+//        System.out.println("\nInitial Generation:");
+//        System.out.println("===================");
+//        System.out.println("Population:");
+//        for(int i = 0; i < this.population_size; i++) {
+//            System.out.println((i + 1) + " - " + this.population.get(i));
+//        }
 
         // Evaluate fitness of initial population members
         this.evalPopulation();
 
         // Output fitness summary
-        System.out.println("\nFitness:");
-        for(int i = 0; i < this.population_size; i++) {
-            System.out.println((i + 1) + " - " + this.fitness.get(i));
-        }
+//        System.out.println("\nFitness:");
+//        for(int i = 0; i < this.population_size; i++) {
+//            System.out.println((i + 1) + " - " + this.fitness.get(i));
+//        }
 
         // Find best solution of generation
         this.best_solution_of_generation.add(this.population.get(this.getBestSolution()));
 
         // Output best solution of generation
-        System.out.println("\nBest solution of initial generation: " + this.best_solution_of_generation.get(0));
+//        System.out.println("\nBest solution of initial generation: " + this.best_solution_of_generation.get(0));
 
         // Find mean solution of generation
         this.mean_fitness_of_generation.add(this.getMeanFitness());
 
         // Output mean solution of generation
-        System.out.println("Mean fitness of initial generation: " + this.mean_fitness_of_generation.get(0));
+//        System.out.println("Mean fitness of initial generation: " + this.mean_fitness_of_generation.get(0));
 
         // Compute fitness of best solution of generation
         this.best_fitness_of_generation.add(this.evalGene(this.population.get(this.getBestSolution())));
 
         // Output best fitness of generation
-        System.out.println("Fitness score of best solution of initial generation: " + this.best_fitness_of_generation.get(0));
+//        System.out.println("Fitness score of best solution of initial generation: " + this.best_fitness_of_generation.get(0));
 
         // If maximum_generations > 1, breed further generations
         if(this.maximum_generations > 1) {
@@ -579,7 +581,7 @@ public class GeneticAlgorithm {
     /**
      * Collects user input to be used as parameters for knapsack problem
      */
-    private void getInput(List<Map.Entry<Integer, Integer>> data, int capacity) {
+    private void getInput(List<Graph.ItemSet> data, int capacity) {
 
         // Hold user input, line by line
         String input;

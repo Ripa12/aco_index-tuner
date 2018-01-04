@@ -1,5 +1,7 @@
 package ACO_Index.DP;
 
+import ACO_Index.Graph;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -125,7 +127,7 @@ public class DynamicProgramming {
 
 
     // Driver program to test above function
-    public static void solveKP(List<Map.Entry<Integer, Integer>> data, int capacity) {
+    public static void solveKP(List<Graph.ItemSet> data, int capacity) {
 
         int n = data.size();
         int val[] = new int[n];

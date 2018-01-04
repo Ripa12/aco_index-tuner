@@ -12,109 +12,137 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MyAntColony {
 //    private int stagnationCounter; // Reference
 
+    MyAbstractObjective objective;
+
+    private double localBestWritesQuality;
+    private List<Integer> localBestWritesSolution;
+
+    private double localBestSupportCountQuality;
+    private List<Integer> localBestSupportCountSolution;
+
     private int capacity;
 
     private double pheromonePersistence;
 
-    private double maximumPheromone;
-    private double minimumPheromone;
+    private double writesMinPheromone;
+    private double writesMaxPheromone;
+
+    private double supportCountMaxPheromone;
+    private double supportCountMinPheromone;
 
     private double alpha;
     private double beta;
     private int nrOfAnts;
-    private int remainingIterations;
 
     MyAnt[] ants; // ToDo: Simple array instead
     private MyGraph graph;
 
-    //private MyAnt globalBestAnt;
-    private List<Integer> globalBestSolution;
-    private double globalBestQuality;
-    //private MyAnt localBestAnt;
-
-    //private MyAnt localAnt; // Reference
-
-//    private int stagnation; // Reference
-    public MyAntColony(MyGraph graph, int nrOfIterations, double pheromonePersistence,
-                       int nrOfAnts, int capacity, double alpha, double beta){
-        this.remainingIterations = nrOfIterations;
-        this.pheromonePersistence = pheromonePersistence;
-        this.nrOfAnts = nrOfAnts;
-        this.alpha = alpha;
-        this.beta = beta;
+    public MyAntColony(MyGraph graph, MyAbstractObjective objective){
+        //this.remainingIterations = nrOfIterations;
+        this.pheromonePersistence = 0;
+        this.nrOfAnts = 0;
+        this.alpha = 0;
+        this.beta = 0;
         this.graph = graph;
+        this.objective = objective;
 //        this.stagnation = 8;
 
-        this.globalBestQuality = 0;
+        //this.globalBestQuality = 0;
 
-        this.capacity = capacity;
+        this.capacity = 0;
 
+        ants = null;
+    }
+
+    public MyAntColony setBeta(double b){
+        this.beta = b;
+        return this;
+    }
+
+    public MyAntColony setAlpha(double a){
+        this.alpha = a;
+        return this;
+    }
+
+    public MyAntColony setPheromonePersistence(double p){
+        this.pheromonePersistence = p;
+        return this;
+    }
+
+    public MyAntColony setCapacity(int cap){
+        this.capacity = cap;
+        return this;
+    }
+
+    public MyAntColony setNrOfAnts(int nr){
+        this.nrOfAnts = nr;
         ants = new MyAnt[nrOfAnts];
         for(int i = 0; i < nrOfAnts; i++){
             ants[i] = new MyAnt(i, graph);
         }
+        return this;
     }
 
-    private void updateMaximumPheromone(){
+    public List<Integer> getLocalBestSupportCountSolution(){
+        return new ArrayList<>(localBestSupportCountSolution);
+    }
+    public List<Integer> getLocalBestWritesSolution(){
+        return new ArrayList<>(localBestWritesSolution);
+    }
+
+    public double getLocalBestSupportCountQuality(){
+        return localBestSupportCountQuality;
+    }
+    public double getLocalBestWritesQuality(){
+        return localBestWritesQuality;
+    }
+
+    public void updatePheromoneMatrix(int objective, List<Integer> globalBestSolution, double globalBestQuality){
+        if(objective == 0)
+            graph.updatePheromoneMatrix(objective, globalBestSolution, globalBestQuality, supportCountMinPheromone);
+        else
+            graph.updatePheromoneMatrix(objective, globalBestSolution, globalBestQuality, writesMinPheromone);
+    }
+
+    public void updateWMaximumPheromone(double globalBestQuality){
         // initial: pheromonePersistence * profits of all frequent item-sets
-        maximumPheromone = 1.0 / (pheromonePersistence * globalBestQuality);
+        writesMaxPheromone = 1.0 / (pheromonePersistence * globalBestQuality);
     }
 
-    private void updateMinimumPheromone(){
-        minimumPheromone = maximumPheromone / 10.0;
+    public void updateSCMaximumPheromone(double globalBestQuality){
+        // initial: pheromonePersistence * profits of all frequent item-sets
+        supportCountMaxPheromone = 1.0 / (pheromonePersistence * globalBestQuality);
+    }
+
+    public void updateSCMinimumPheromone(){
+        supportCountMinPheromone = supportCountMaxPheromone / 10.0;
+    }
+    public void updateWMinimumPheromone(){
+        writesMinPheromone = writesMaxPheromone / 10.0;
     }
 
     public void start(){
 
-        graph.resetPheromoneMatrix(1.0/(pheromonePersistence*graph.getTotalProfit()));
+        graph.resetPheromoneMatrix(0,1.0/(pheromonePersistence*graph.getTotalProfit()));
+        graph.resetPheromoneMatrix(1, 1.0/(pheromonePersistence*graph.getTotalWrites()));
 
-        int quality = 0;
-        // Ant at each node?
-        while (remainingIterations > 0){
-
-            double localBestQuality = 0;
-            List<Integer> localBestSolution = null;
+            localBestSupportCountQuality = 0;
+            localBestWritesQuality = Double.MAX_VALUE;
+            localBestSupportCountSolution = null;
+            localBestWritesSolution = null;
             for(MyAnt ant : ants){
                 ant.findSolution(capacity, alpha, beta);
 
-                if(localBestQuality < ant.getSolutionQuality()){
-                    localBestQuality = ant.getSolutionQuality();
-                    localBestSolution = ant.getSolution();
+                if(localBestSupportCountQuality < ant.getSolutionSupportCountQuality()){
+                    localBestSupportCountQuality = ant.getSolutionSupportCountQuality();
+                    localBestSupportCountSolution = ant.getSolution();
+                }
+                if(localBestWritesQuality > ant.getSolutionWritesQuality()){
+                    localBestWritesQuality = ant.getSolutionWritesQuality();
+                    localBestWritesSolution = ant.getSolution();
                 }
             }
-            if(localBestQuality > globalBestQuality){
-                globalBestQuality = localBestQuality;
-                globalBestSolution = new ArrayList<>(localBestSolution);
-            }
-                updateMaximumPheromone();
-                updateMinimumPheromone();
-                graph.updatePheromoneMatrix(globalBestSolution, globalBestQuality, minimumPheromone);
-//            }
-            graph.evaporatePheromones(pheromonePersistence, maximumPheromone);
-//            restartPheromoneMatrix(localBestQuality);
-            remainingIterations--;
-        }
-
-        System.out.println("Best solution found: " + globalBestQuality);
+        graph.evaporatePheromones(0, pheromonePersistence, supportCountMaxPheromone);
+        graph.evaporatePheromones(1, pheromonePersistence, writesMaxPheromone);
     }
-
-//    private void restartPheromoneMatrix(double quality){
-////        if (bestAnt == null) {
-////            bestAnt = aco.getGlobalBest().clone();
-////        }
-//
-//        if (quality == globalBestQuality) {
-//            stagnationCounter++;
-//        }else{
-//            //localBest = globalBestAnt;
-//            stagnationCounter = 0;
-//        }
-//
-//        if (stagnationCounter == stagnation) {
-//
-//            //LOGGER.debug("The stagnation was reached. The pheromone matrix will be restarted");
-//            graph.resetPheromoneMatrix(maximumPheromone);
-//            stagnationCounter = 0;
-//        }
-//    }
 }
