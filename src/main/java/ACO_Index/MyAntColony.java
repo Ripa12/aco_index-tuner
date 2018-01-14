@@ -125,6 +125,7 @@ public class MyAntColony {
 
         graph.resetPheromoneMatrix(0,1.0/(pheromonePersistence*graph.getTotalProfit()));
         graph.resetPheromoneMatrix(1, 1.0/(pheromonePersistence*graph.getTotalWrites()));
+//        graph.resetPheromoneMatrix(1, 1.0/(pheromonePersistence*graph.getTotalWrites()));
 
             localBestSupportCountQuality = 0;
             localBestWritesQuality = Double.MAX_VALUE;

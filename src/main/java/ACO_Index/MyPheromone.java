@@ -25,7 +25,6 @@ public class MyPheromone {
     }
 
     public void reset(double value){
-        //for(int i = 0; i < this.pheromoneMatrices.length; i++)
         for (double[] row: this.pheromoneMatrix)
             Arrays.fill(row, value);
     }
@@ -45,20 +44,11 @@ public class MyPheromone {
     public void update(MyAbstractObjective objective, Solution solution){
         double factor = objective.calculatePheromoneFactor();
 
-        // toDo: Temporary solution, should be moved somewhere else!
-//        if(objective == 0){
-//            factor = (solutionQuality / profitR);
-//        }
-//        else{
-//            factor = ((writesR - solutionQuality) / writesR);
-//        }
-
         for (int i : solution.getSolution()) {
             for (int j = 0; j < size; j++) {
                 pheromoneMatrix[i][j] = pheromoneMatrix[i][j] + 1 * factor;
                 pheromoneMatrix[i][j] = Math.max(pheromoneMatrix[i][j], minPheromone);
                 pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
-//               }
             }
         }
 

@@ -1,17 +1,11 @@
-GA
-------
-Total quality: 94521 Total weight: 994
-Total time: 9.408316954
-------
+Best SupportCount found: 541875.0
+Best Writes found: 8722183.0
+560293
 
-ACO
-------
-Quality: 101478.0
-Weight: 999
-------
+Best SupportCount found: 543374.0
+Best Writes found: 8626804.0
+560293
 
-DP
-------
-Quality: 111373
-Total time: 0.231438676
-------
+Best SupportCount found: 486001.0
+Best Writes found: 7725618.0
+560293

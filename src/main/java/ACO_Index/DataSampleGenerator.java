@@ -29,7 +29,7 @@ public class DataSampleGenerator {
                     new BufferedOutputStream(new FileOutputStream(path)), "UTF-8"));
 
             out.println(nrOfAttr);
-            int nrOfTransHalf = (int)nrOfTrans/1000;
+            int nrOfTransHalf = (int)nrOfTrans/10;
             for(long i = 0; i < nrOfAttr; i++) {
                 String line = "";
 

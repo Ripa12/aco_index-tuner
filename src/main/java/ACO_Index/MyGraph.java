@@ -20,7 +20,8 @@ public class MyGraph {
     private BitSet[] transactionMatrix;
 
     private double profitR;
-    private double writesR;
+    private double maxWritesR;
+    private double sumWritesR;
     private double weightR;
     public MyGraph(List<Graph.ItemSet> data, int cap){
         nrOfNodes = data.size();
@@ -39,8 +40,8 @@ public class MyGraph {
         }
         this.capacity = cap;
 
-//        this.writesR = Arrays.stream(writes).reduce(Double::max).getAsDouble();
-        this.writesR = Arrays.stream(writes).reduce(Double::max).getAsDouble();
+        this.sumWritesR = Arrays.stream(writes).reduce(Double::sum).getAsDouble();
+        this.maxWritesR = Arrays.stream(writes).reduce(Double::max).getAsDouble();
         this.profitR = Arrays.stream(profits).reduce(Double::sum).getAsDouble();
         this.weightR = Arrays.stream(weights).reduce(Double::sum).getAsDouble();
     }
@@ -50,7 +51,11 @@ public class MyGraph {
     }
 
     public double getTotalWrites(){
-        return writesR;
+        return sumWritesR;
+    }
+
+    public double getMaxWrites(){
+        return maxWritesR;
     }
 
     public int getRandomPosition(){
@@ -121,10 +126,12 @@ public class MyGraph {
 
         // toDo: Temporary solution, should be moved somewhere else!
         if(objective == 0){
-            factor = (solutionQuality / profitR);
+//            factor = (solutionQuality / profitR);
+            factor = (1/solutionQuality); /// profitR);
         }
         else{
-            factor = ((writesR - solutionQuality) / writesR);
+//            factor = ((sumWritesR - solutionQuality) / sumWritesR);
+            factor = (1/(sumWritesR - solutionQuality));// / sumWritesR);
         }
 
         for (int i : solution) {

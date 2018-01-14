@@ -19,6 +19,7 @@ public class ColonyManager {
     public ColonyManager(){
         colonies = new ArrayList<>();
         globalBestSupportCountQuality = 0;
+        globalBestWritesQuality = Double.MAX_VALUE;
     }
 
     public void addColony(MyAntColony colony){
@@ -34,7 +35,7 @@ public class ColonyManager {
                     globalBestSupportCountQuality = colony.getLocalBestSupportCountQuality();
                     globalBestSupportCountSolution = colony.getLocalBestSupportCountSolution();//new ArrayList<>(localBestSolution);
                 }
-                if(colony.getLocalBestWritesQuality() > globalBestWritesQuality){
+                if(colony.getLocalBestWritesQuality() < globalBestWritesQuality){
                     globalBestWritesQuality = colony.getLocalBestWritesQuality();
                     globalBestWritesSolution = colony.getLocalBestWritesSolution();//new ArrayList<>(localBestSolution);
                 }

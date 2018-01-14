@@ -7,20 +7,22 @@ public abstract class MyAbstractObjective {
 
     // http://ieeexplore.ieee.org/document/4630948/
     // https://www.sciencedirect.com/science/article/pii/S0307904X13001157 Shows that PACO is a god approach to MOP
-    private int value;
+    protected double[] valueArray;
 
-    private double totalValue;
+    //private double totalValue;
 
-    public MyAbstractObjective(double total){
-        totalValue = total;
+    public MyAbstractObjective(double[] vArray){
+        this.valueArray = vArray;
     }
-    public int getValue(){
-        return value;
+    public double getValue(int index){
+        return valueArray[index];
     }
 
     public abstract boolean isEqual(MyAbstractObjective other);
     public abstract boolean isBetter(MyAbstractObjective other);
 
     public abstract double calculatePheromoneFactor();
+
+    public abstract double calculateHeuristic(int index);
 
 }
