@@ -1,6 +1,9 @@
-package ACO_Index;
+package ACO_Index.Knapsack;
 
-import java.util.Arrays;
+import ACO_Index.Graph;
+import ACO_Index.Objectives.SupportCountObjective;
+import ACO_Index.Objectives.WriteRatioObjective;
+
 import java.util.List;
 
 /**
@@ -44,7 +47,8 @@ public class KnapsackFactory implements IKnapsackFactory{
         return this;
     }
 
-    public Knapsack buildKnapsack(){
+    @Override
+    public Knapsack buildKnapsack(int capacity){
         Knapsack knapsack = null;
 
         int nrOfNodes = data.size();
@@ -60,7 +64,7 @@ public class KnapsackFactory implements IKnapsackFactory{
         WriteRatioObjective wObjective = new WriteRatioObjective(writeRatio);
         SupportCountObjective scObjective = new SupportCountObjective(supportCount);
 
-        knapsack = new Knapsack(weights, capacity);
+        knapsack = new Knapsack(weights, capacity, alpha, beta);
         knapsack.addObjective(wObjective, persistence);
         knapsack.addObjective(scObjective, persistence);
 

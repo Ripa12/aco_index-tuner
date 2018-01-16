@@ -1,4 +1,7 @@
-package ACO_Index;
+package ACO_Index.Objectives;
+
+import ACO_Index.MyPheromone;
+import ACO_Index.Objectives.MyAbstractObjective;
 
 import java.util.Arrays;
 
@@ -9,10 +12,16 @@ public class SupportCountObjective extends MyAbstractObjective {
 
     private double sumSupportCount;
 
-    public SupportCountObjective(double[] array) {
-        super(array);
+    public SupportCountObjective(double[] array, MyPheromone pheromone) {
+        super(array, pheromone);
 
         sumSupportCount = Arrays.stream(valueArray).reduce(Double::sum).getAsDouble();
+    }
+
+    @Override
+    public void reset() {
+        pheromone.reset(sumSupportCount);
+        bestQuality = 0;
     }
 
     @Override
@@ -26,8 +35,8 @@ public class SupportCountObjective extends MyAbstractObjective {
     }
 
     @Override
-    public double calculatePheromoneFactor() {
-        return 0;
+    public void updatePheromone(int[] solution) {
+        pheromone.update((1/bestQuality), bestQuality, solution);
     }
 
     @Override

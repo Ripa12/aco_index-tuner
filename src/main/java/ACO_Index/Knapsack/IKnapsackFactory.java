@@ -1,6 +1,6 @@
-package ACO_Index;
+package ACO_Index.Knapsack;
 
-import java.util.List;
+import ACO_Index.Knapsack.Knapsack;
 
 /**
  * Created by Richard on 2018-01-04.

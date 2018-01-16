@@ -1,10 +1,9 @@
 package ACO_Index;
 
+import ACO_Index.Objectives.MyAbstractObjective;
+
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Richard on 2017-12-30.

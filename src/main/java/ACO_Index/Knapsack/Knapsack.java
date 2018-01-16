@@ -1,7 +1,10 @@
-package ACO_Index;
+package ACO_Index.Knapsack;
+
+import ACO_Index.Constraints.MyConstraint;
+import ACO_Index.MyPheromone;
+import ACO_Index.Objectives.MyAbstractObjective;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,8 +20,8 @@ public class Knapsack {
 
     private double capacity;
 
-    private List<MyAbstractObjective> objectives;
-    private List<MyPheromone> pheromones;
+    MyConstraint globalConstraint;
+
 
     private double[] weights;
 
@@ -33,13 +36,10 @@ public class Knapsack {
         this.nrOfNodes = weights.length;
         this.capacity = cap;
 
-        objectives = new ArrayList<>();
-
     }
 
-    public void addObjective(MyAbstractObjective obj, double percipience) {
-        objectives.add(obj);
-        pheromones.add(new MyPheromone(nrOfNodes, percipience));
+    public int getNumberOfItems(){
+        return nrOfNodes;
     }
 
     public void pruneNeighbours(List<Integer> neighbour, double currentWeight) {
@@ -56,22 +56,24 @@ public class Knapsack {
         return neighbours;
     }
 
-    private double calculateAggregateProbabilities(int pheromoneIndex, int currentIndex, double[] probabilities, List<Integer> neighbours) {
+    private int getNextItem(List<MyAbstractObjective> objectives, MyPheromone pheromone, int currentIndex, List<Integer> neighbours) {
 
+        double[] probabilities = new double[neighbours.size()];
         double total = 0;
 
-        // nodes to visit
+        int neighbourIndex = 0;
         for (int i = 0; i < neighbours.size(); i++) {
             double heuristics = 0;
+
+            neighbourIndex = neighbours.get(i);
             for (MyAbstractObjective obj :
                     objectives) {
-                heuristics += obj.calculateHeuristic(neighbours.get(i));
+                heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex)/weights[neighbourIndex], beta);
             }
-            heuristics = Math.pow(heuristics, beta);
 
-            double pheromone = Math.pow(pheromones.get(pheromoneIndex).getPheromone(currentIndex, neighbours.get(i)), alpha);
+            double p = Math.pow(pheromone.getPheromone(currentIndex, neighbourIndex), alpha);
 
-            probabilities[i] = heuristics * pheromone;
+            probabilities[i] = heuristics * p;
 
             total += probabilities[i];
         }
@@ -82,17 +84,9 @@ public class Knapsack {
             sumProbability += probabilities[i] / total;
         }
 
-        return sumProbability;
-    }
-
-    private int getNextItem(int pheromoneIndex, int currentIndex, List<Integer> neighbours) {
-
-        double[] probabilities = new double[neighbours.size()];
-        double sumProbability = calculateAggregateProbabilities(pheromoneIndex, currentIndex, probabilities, neighbours);
-
         double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
 
-        double total = 0;
+        total = 0;
 
         for (int i = 0; i < neighbours.size(); i++) {
             total += probabilities[i];

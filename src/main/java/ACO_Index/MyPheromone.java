@@ -1,5 +1,7 @@
 package ACO_Index;
 
+import ACO_Index.Objectives.MyAbstractObjective;
+
 import java.util.Arrays;
 
 /**
@@ -24,10 +26,17 @@ public class MyPheromone {
         return pheromoneMatrix[from][to];
     }
 
-    public void reset(double value){
+    public void reset(double totalProfit){
         for (double[] row: this.pheromoneMatrix)
-            Arrays.fill(row, value);
+            Arrays.fill(row, 1.0/(persistence * totalProfit));
     }
+
+    private void updatePheromoneLevel(double globalBestQuality){
+        maxPheromone = 1.0 / (persistence * globalBestQuality);
+        minPheromone = maxPheromone / 10.0;
+    }
+
+
 
     public void evaporate(MyAbstractObjective objective){
 
@@ -41,10 +50,10 @@ public class MyPheromone {
 
     }
 
-    public void update(MyAbstractObjective objective, Solution solution){
-        double factor = objective.calculatePheromoneFactor();
+    public void update(double factor, double bestQuality, int[] solution){
+        updatePheromoneLevel(bestQuality);
 
-        for (int i : solution.getSolution()) {
+        for (int i : solution) {
             for (int j = 0; j < size; j++) {
                 pheromoneMatrix[i][j] = pheromoneMatrix[i][j] + 1 * factor;
                 pheromoneMatrix[i][j] = Math.max(pheromoneMatrix[i][j], minPheromone);

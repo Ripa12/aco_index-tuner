@@ -1,5 +1,7 @@
 package ACO_Index;
 
+import ACO_Index.Objectives.MyAbstractObjective;
+
 /**
  * Created by Richard on 2018-01-03.
  */
@@ -11,26 +13,31 @@ public class Solution {
         inferior
     }
 
-    MyAbstractObjective[] objectiveQualities;
+    MyAbstractObjective[] objectives;
     int[] solution;
 
-    public Solution(){
-
+    public Solution(MyAbstractObjective[] objectives, int[] solution){
+        this.objectives = objectives;
+        this.solution = solution;
     }
 
     public int[] getSolution(){
         return solution;
     }
 
+    public MyAbstractObjective getObjective(int index) {
+        return objectives[index];
+    }
+
     public DominationStatus dominates(Solution other){
         DominationStatus status = DominationStatus.inferior;
 
         boolean stop = false;
-        for(int i = 0; i < objectiveQualities.length && !stop; i++){
-            if(objectiveQualities[i].equals(other.objectiveQualities[i])){
+        for(int i = 0; i < objectives.length && !stop; i++){
+            if(objectives[i].equals(other.objectives[i])){
                 // Do nothing
             }
-            else if(objectiveQualities[i].isBetter(other.objectiveQualities[i])){
+            else if(objectives[i].isBetter(other.objectives[i])){
                 status = DominationStatus.superior;
             }
             else{
