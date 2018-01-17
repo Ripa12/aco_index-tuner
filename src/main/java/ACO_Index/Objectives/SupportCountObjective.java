@@ -18,6 +18,12 @@ public class SupportCountObjective extends MyAbstractObjective {
         sumSupportCount = Arrays.stream(valueArray).reduce(Double::sum).getAsDouble();
     }
 
+    private SupportCountObjective(double[] array, MyPheromone pheromone, double sumSupportCount){
+        super(array, pheromone);
+
+        this.sumSupportCount = sumSupportCount;
+    }
+
     @Override
     public void reset() {
         pheromone.reset(sumSupportCount);
@@ -42,6 +48,11 @@ public class SupportCountObjective extends MyAbstractObjective {
     @Override
     public double calculateHeuristic(int index) {
         return valueArray[index];
+    }
+
+    @Override
+    public MyAbstractObjective clone() {
+        return new SupportCountObjective(this.valueArray, pheromone, sumSupportCount);
     }
 
 

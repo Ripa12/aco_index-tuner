@@ -20,9 +20,9 @@ public abstract class MyAbstractObjective {
 
     public MyAbstractObjective(double[] vArray, MyPheromone pheromone){
         this.valueArray = vArray;
-        this.bestQuality = Double.MIN_VALUE;
-
         this.pheromone = pheromone;
+
+        this.bestQuality = Double.MIN_VALUE;
     }
 
     public boolean updateBestQuality(double other){
@@ -36,13 +36,16 @@ public abstract class MyAbstractObjective {
         return isGreater;
     }
 
-
     public double getValue(int index){
         return valueArray[index];
     }
 
     public double getBestQuality(){
         return bestQuality;
+    }
+
+    public void evaporate(){
+        pheromone.evaporate(this);
     }
 
     public abstract void reset();
@@ -54,5 +57,7 @@ public abstract class MyAbstractObjective {
     public abstract void updatePheromone(int[] solution);
 
     public abstract double calculateHeuristic(int index);
+
+    public abstract MyAbstractObjective clone();
 
 }

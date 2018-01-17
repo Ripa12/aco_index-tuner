@@ -9,14 +9,21 @@ import java.util.Arrays;
  * Created by Richard on 2018-01-04.
  */
 public class WriteRatioObjective extends MyAbstractObjective {
-    private double maxWriteRatio;
-    private double sumWriteRatio;
+    private static double maxWriteRatio;
+    private static double sumWriteRatio;
 
     public WriteRatioObjective(double[] vArray, MyPheromone pheromone) {
         super(vArray, pheromone);
 
-        double sumWriteRatio = Arrays.stream(valueArray).reduce(Double::sum).getAsDouble(); // ToDo: + 1 maybe to avoid division by zero
-        double maxWriteRatio = Arrays.stream(valueArray).reduce(Double::max).getAsDouble();
+        sumWriteRatio = Arrays.stream(valueArray).reduce(Double::sum).getAsDouble(); // ToDo: + 1 maybe to avoid division by zero
+        maxWriteRatio = Arrays.stream(valueArray).reduce(Double::max).getAsDouble();
+    }
+
+    private WriteRatioObjective(double[] vArray, MyPheromone pheromone, double sumWriteRatio, double maxWriteRatio) {
+        super(vArray, pheromone);
+
+        this.sumWriteRatio = sumWriteRatio; // ToDo: + 1 maybe to avoid division by zero
+        this.maxWriteRatio = maxWriteRatio;
     }
 
     @Override
@@ -43,5 +50,10 @@ public class WriteRatioObjective extends MyAbstractObjective {
     @Override
     public double calculateHeuristic(int index) {
         return (maxWriteRatio - valueArray[index]);
+    }
+
+    @Override
+    public MyAbstractObjective clone() {
+        return new WriteRatioObjective(this.valueArray, this.pheromone, sumWriteRatio, maxWriteRatio);
     }
 }

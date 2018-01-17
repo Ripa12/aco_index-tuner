@@ -2,6 +2,11 @@ package ACO_Index;
 
 import ACO_Index.Objectives.MyAbstractObjective;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+
 /**
  * Created by Richard on 2018-01-03.
  */
@@ -13,20 +18,32 @@ public class Solution {
         inferior
     }
 
+
     MyAbstractObjective[] objectives;
-    int[] solution;
+    List<Integer> solution;
 
-    public Solution(MyAbstractObjective[] objectives, int[] solution){
-        this.objectives = objectives;
-        this.solution = solution;
+    public Solution(MyAbstractObjective[] objectives, Integer[] solution){
+        this.solution = Arrays.asList(solution);
+
+        this.objectives = new MyAbstractObjective[objectives.length];
+        for (int o = 0; o < objectives.length; o++){
+            this.objectives[o] = (objectives[o].clone());
+        }
     }
 
-    public int[] getSolution(){
-        return solution;
+    public void add(Integer item){
+        solution.add(item);
     }
 
-    public MyAbstractObjective getObjective(int index) {
-        return objectives[index];
+    public void clear(){
+        solution.clear();
+        for(MyAbstractObjective obj : objectives){
+            obj.reset();
+        }
+    }
+
+    public Integer[] getSolution(){
+        return (Integer[]) solution.toArray();
     }
 
     public DominationStatus dominates(Solution other){

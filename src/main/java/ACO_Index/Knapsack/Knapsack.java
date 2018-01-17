@@ -3,6 +3,7 @@ package ACO_Index.Knapsack;
 import ACO_Index.Constraints.MyConstraint;
 import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.MyAbstractObjective;
+import ACO_Index.Solution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * Created by Richard on 2018-01-04.
  */
 public class Knapsack {
+
+    private List<MyAbstractObjective> objectives;
 
     private double alpha;
     private double beta;
@@ -40,6 +43,38 @@ public class Knapsack {
 
     public int getNumberOfItems(){
         return nrOfNodes;
+    }
+
+    public double getWeight(int index){
+        return weights[index];
+    }
+
+    public int getRandomPosition(){
+        return ThreadLocalRandom.current().nextInt(0, nrOfNodes);
+    }
+
+    public void addObjective(MyAbstractObjective obj) {
+        objectives.add(obj);
+    }
+
+    public void updatePheromone(int objective, Solution globalBestSolution){
+        objectives.get(objective).updatePheromone(globalBestSolution.getSolution());
+    }
+
+    public void reset(){
+        for(MyAbstractObjective obj : objectives){
+            obj.reset();
+        }
+    }
+
+    public void evaporate(){
+        for(MyAbstractObjective p : objectives){
+            p.evaporate();
+        }
+    }
+
+    public void incrementQuality(int position, Solution solution){
+
     }
 
     public void pruneNeighbours(List<Integer> neighbour, double currentWeight) {

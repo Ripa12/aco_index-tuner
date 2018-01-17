@@ -1,6 +1,7 @@
 package ACO_Index.Knapsack;
 
 import ACO_Index.Graph;
+import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.SupportCountObjective;
 import ACO_Index.Objectives.WriteRatioObjective;
 
@@ -61,12 +62,12 @@ public class KnapsackFactory implements IKnapsackFactory{
             weights[i]=(data.get(i).getValue());
             writeRatio[i]=(data.get(i).getWriteToRead());
         }
-        WriteRatioObjective wObjective = new WriteRatioObjective(writeRatio);
-        SupportCountObjective scObjective = new SupportCountObjective(supportCount);
+        WriteRatioObjective wObjective = new WriteRatioObjective(writeRatio, new MyPheromone(nrOfNodes, persistence));
+        SupportCountObjective scObjective = new SupportCountObjective(supportCount, new MyPheromone(nrOfNodes, persistence));
 
         knapsack = new Knapsack(weights, capacity, alpha, beta);
-        knapsack.addObjective(wObjective, persistence);
-        knapsack.addObjective(scObjective, persistence);
+        knapsack.addObjective(wObjective);
+        knapsack.addObjective(scObjective);
 
         return knapsack;
     }
