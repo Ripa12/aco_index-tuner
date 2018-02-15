@@ -23,7 +23,7 @@ public class MyAnt {
     public MyAnt(int index, Knapsack knapsack){
         this.knapsack = knapsack;
         this.index = index;
-        this.solution = new Solution();
+        this.solution = new Solution(knapsack.getNumberOfObjectives());
 
     }
 
@@ -35,8 +35,7 @@ public class MyAnt {
         return index;
     }
 
-    public void findSolution(int capacity, double alpha, double beta){
-
+    public void findSolution(){
         solution.clear();
 
         currentPosition = knapsack.getRandomPosition();
@@ -48,7 +47,8 @@ public class MyAnt {
         List<Integer> neighbours = knapsack.getNeighbours(currentPosition, currentWeight);
 
         while (neighbours.size()>0){
-            int nextPosition = getNextItem(neighbours, Math.random() < 0.5 ? 0 : 1, alpha, beta);
+            // ToDo: Only supports 2 objectives as of now
+            int nextPosition = getNextItem(currentPosition, Math.random() < 0.5 ? 0 : 1, neighbours);
 
             neighbours.remove(nextPosition);
 
@@ -57,79 +57,33 @@ public class MyAnt {
             currentPosition = nextPosition;
             solution.add(nextPosition);
 
-
-            supportCountQuality += knapsack.getProfit(nextPosition);
-            writesQuality += knapsack.getWrites(nextPosition);
+            knapsack.incrementQuality(nextPosition, solution);
+//            supportCountQuality += knapsack.getProfit(nextPosition);
+//            writesQuality += knapsack.getWrites(nextPosition);
             currentWeight += knapsack.getWeight(nextPosition);
         }
         System.out.println("Weight: " +  currentWeight);
         System.out.println(solution);
     }
 
-    private double calculateWriteHeuristic(int i){
-        return ((knapsack.getMaxWrites() - knapsack.getWrites(i))/knapsack.getWeight(i));
-    }
-
-    private double calculateSupportHeuristic(int i){
-        return knapsack.getProfit(i)/knapsack.getWeight(i);
-    }
-
-    // ToDo: Move to MyAbstractObjective!
-    private double calculateAggregateProbabilities(double[] probability, int objective, List<Integer> neighbours,
-                                                   double alpha, double beta){
-//        double[] tij = new double[neighbours.size()];
-//        double[] nij = new double[neighbours.size()]; // This is the reason why it took so long!
-//        double[] nij = new double[nrOfNodes];
-        double[] tijnij = new double[neighbours.size()];
-
-        double scTotal = 0;
-        double wTotal = 0;
-
-        // nodes to visit
-        for (int i = 0; i < neighbours.size(); i++){
-//            tij[i] = Math.pow(knapsack.getPheromone(objective, index, neighbours.get(i)), alpha);
-//            nij[i] = Math.pow(calculateSupportHeuristic(neighbours.get(i)), beta) + Math.pow(calculateWriteHeuristic(neighbours.get(i)), beta);
-            tijnij[i] = Math.pow(knapsack.getPheromone(objective, index, neighbours.get(i)), alpha) *
-                    (Math.pow(calculateSupportHeuristic(neighbours.get(i)), beta) +
-                            Math.pow(calculateWriteHeuristic(neighbours.get(i)), beta));
-
-            scTotal += tijnij[i];
-            //scTotal += tij[i] * nij[i];
-            //wTotal += tij[i] * nij[1][i];
-        }
-
-        double sumProbability = 0.0;
-
-        for (int i = 0; i < neighbours.size(); i++){
-//            probability[i] = ((tij[i] * nij[i]) / scTotal);
-            probability[i] = tijnij[i] / scTotal;
-
-            sumProbability += probability[i];
-        }
-
-        return sumProbability;
-    }
-
-
-
     // ToDo: Pass MyAbstractObjective instance as parameter
-    private int getNextItem(List<Integer> neighbours, int indexObj, double alpha, double beta){
+    private int getNextItem(int currentIndex, int objective, List<Integer> neighbours) {
 
-        double[] probability = new double[neighbours.size()];
-        double sumProbability = calculateAggregateProbabilities(probability, indexObj, neighbours, alpha, beta);
+        double[] probabilities = new double[neighbours.size()];
+        double sumProbability = knapsack.calculateProbabilities(currentIndex, objective, neighbours, probabilities);
 
-        int j = 0;
+        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
 
-        double p = probability[j];
+        double total = 0;
 
-        double r = ThreadLocalRandom.current().nextDouble(sumProbability);
-
-        while (p < r) {
-            j = j + 1;
-            p = p + probability[j];
+        for (int i = 0; i < neighbours.size(); i++) {
+            total += probabilities[i];
+            if (total >= rand) {
+                return i;
+            }
         }
 
-        return j;
+        return -1;
     }
 
 }

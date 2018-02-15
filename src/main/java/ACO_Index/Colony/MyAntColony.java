@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class MyAntColony {
 
-
     private Solution bestSolution;
 
     private int nrOfAnts;
@@ -45,15 +44,16 @@ public class MyAntColony {
 
         bestSolution.clear();
         for(MyAnt ant : ants){
-            ant.findSolution(capacity, alpha, beta);
+            ant.findSolution();
 
-            if(localBestSupportCountQuality < ant.getSolutionSupportCountQuality()){
-                localBestSupportCountQuality = ant.getSolutionSupportCountQuality();
-                localBestSupportCountSolution = ant.getSolution();
+            // ToDo: this is where pareto front should be
+            if(bestSolution.getSupportCountQuality() < ant.getSolution().getSupportCountQuality()){
+                bestSolution.setSupportCountQuality(ant.getSolution().getSupportCountQuality());
+                //localBestSupportCountSolution = ant.getSolution();
             }
-            if(localBestWritesQuality > ant.getSolutionWritesQuality()){
-                localBestWritesQuality = ant.getSolutionWritesQuality();
-                localBestWritesSolution = ant.getSolution();
+            if(bestSolution.getWriteQuality() > ant.getSolution().getWriteQuality()){
+                bestSolution.setWriteQuality(ant.getSolution().getWriteQuality());
+                //localBestWritesSolution = ant.getSolution();
             }
         }
 

@@ -43,6 +43,13 @@ public abstract class MyAbstractObjective {
     public double getBestQuality(){
         return bestQuality;
     }
+    public void setBestQuality(double quality){
+        bestQuality = quality;
+    }
+
+    public double getPheromone(int from, int to){
+        return pheromone.getPheromone(from, to);
+    }
 
     public void evaporate(){
         pheromone.evaporate(this);
@@ -54,7 +61,7 @@ public abstract class MyAbstractObjective {
     public abstract boolean isEqual(MyAbstractObjective other);
     public abstract boolean isBetter(MyAbstractObjective other);
 
-    public abstract void updatePheromone(int[] solution);
+    public abstract void updatePheromone(Integer[] solution);
 
     public abstract double calculateHeuristic(int index);
 

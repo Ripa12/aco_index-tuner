@@ -36,8 +36,6 @@ public class MyPheromone {
         minPheromone = maxPheromone / 10.0;
     }
 
-
-
     public void evaporate(MyAbstractObjective objective){
 
         for (int i = 0; i < size; i++) {
@@ -50,7 +48,7 @@ public class MyPheromone {
 
     }
 
-    public void update(double factor, double bestQuality, int[] solution){
+    public void update(double factor, double bestQuality, Integer[] solution){
         updatePheromoneLevel(bestQuality);
 
         for (int i : solution) {

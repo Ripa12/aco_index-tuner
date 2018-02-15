@@ -41,7 +41,7 @@ public class SupportCountObjective extends MyAbstractObjective {
     }
 
     @Override
-    public void updatePheromone(int[] solution) {
+    public void updatePheromone(Integer[] solution) {
         pheromone.update((1/bestQuality), bestQuality, solution);
     }
 

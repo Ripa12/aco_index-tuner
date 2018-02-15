@@ -45,6 +45,10 @@ public class Knapsack {
         return nrOfNodes;
     }
 
+    public int getNumberOfObjectives() {
+        return objectives.size();
+    }
+
     public double getWeight(int index){
         return weights[index];
     }
@@ -74,7 +78,9 @@ public class Knapsack {
     }
 
     public void incrementQuality(int position, Solution solution){
-
+        for (int i = 0; i < objectives.size(); i++){
+            solution.incrementQuality(i, objectives.get(i).getValue(position));
+        }
     }
 
     public void pruneNeighbours(List<Integer> neighbour, double currentWeight) {
@@ -91,9 +97,7 @@ public class Knapsack {
         return neighbours;
     }
 
-    private int getNextItem(List<MyAbstractObjective> objectives, MyPheromone pheromone, int currentIndex, List<Integer> neighbours) {
-
-        double[] probabilities = new double[neighbours.size()];
+    public double calculateProbabilities(int currentIndex, int objective, List<Integer> neighbours, double[] outProbabilities){
         double total = 0;
 
         int neighbourIndex = 0;
@@ -106,31 +110,61 @@ public class Knapsack {
                 heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex)/weights[neighbourIndex], beta);
             }
 
-            double p = Math.pow(pheromone.getPheromone(currentIndex, neighbourIndex), alpha);
+            double p = Math.pow(objectives.get(objective).getPheromone(currentIndex, neighbourIndex), alpha);
 
-            probabilities[i] = heuristics * p;
+            outProbabilities[i] = heuristics * p;
 
-            total += probabilities[i];
+            total += outProbabilities[i];
         }
 
         double sumProbability = 0.0;
 
         for (int i = 0; i < neighbours.size(); i++) {
-            sumProbability += probabilities[i] / total;
+            sumProbability += outProbabilities[i] / total;
         }
-
-        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
-
-        total = 0;
-
-        for (int i = 0; i < neighbours.size(); i++) {
-            total += probabilities[i];
-            if (total >= rand) {
-                return i;
-            }
-        }
-
-        return -1;
+        return sumProbability;
     }
+
+//    private int getNextItem(List<MyAbstractObjective> objectives, MyPheromone pheromone, int currentIndex, List<Integer> neighbours) {
+//
+//        double[] probabilities = new double[neighbours.size()];
+//        double total = 0;
+//
+//        int neighbourIndex = 0;
+//        for (int i = 0; i < neighbours.size(); i++) {
+//            double heuristics = 0;
+//
+//            neighbourIndex = neighbours.get(i);
+//            for (MyAbstractObjective obj :
+//                    objectives) {
+//                heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex)/weights[neighbourIndex], beta);
+//            }
+//
+//            double p = Math.pow(pheromone.getPheromone(currentIndex, neighbourIndex), alpha);
+//
+//            probabilities[i] = heuristics * p;
+//
+//            total += probabilities[i];
+//        }
+//
+//        double sumProbability = 0.0;
+//
+//        for (int i = 0; i < neighbours.size(); i++) {
+//            sumProbability += probabilities[i] / total;
+//        }
+//
+//        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
+//
+//        total = 0;
+//
+//        for (int i = 0; i < neighbours.size(); i++) {
+//            total += probabilities[i];
+//            if (total >= rand) {
+//                return i;
+//            }
+//        }
+//
+//        return -1;
+//    }
 
 }

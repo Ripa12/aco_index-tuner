@@ -43,7 +43,7 @@ public class WriteRatioObjective extends MyAbstractObjective {
     }
 
     @Override
-    public void updatePheromone(int[] solution)  {
+    public void updatePheromone(Integer[] solution)  {
         pheromone.update((1/(sumWriteRatio - bestQuality)), bestQuality, solution); // ToDo: Maybe 1/bestQuality is enough?
     }
 
