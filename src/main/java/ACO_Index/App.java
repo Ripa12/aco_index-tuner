@@ -7,6 +7,7 @@ package ACO_Index;
 import ACO_Index.DP.DynamicProgramming;
 import ACO_Index.GA.Genetic;
 import ACO_Index.GA.GeneticAlgorithm;
+import ACO_Index.Knapsack.KnapsackFactory;
 import org.apache.log4j.BasicConfigurator;
 
 /**
@@ -36,20 +37,27 @@ public class App
         long graphBuildTime = System.nanoTime() - startTime;
 
         startTime = System.nanoTime();
+        ACO_Index.Colony.MyAntColony colony = new ACO_Index.Colony.MyAntColony(KnapsackFactory
+                .getFactory(graph.debugFrequentItemSets((int)500)).buildKnapsack())
+                .setNrOfAnts(NR_OF_ANTS)
+                .setNrOfIterations(5);
+        colony.start();
+
+
 //        AntColony antColony = new AntColony(NR_OF_ANTS, 5,
 //                .05, .3, graph);
 //        antColony.start(2, 1,  10, (int)500, WEIGHT_LIMIT);
 //        new MyAntColony(new MyGraph(graph.debugFrequentItemSets((int)500), WEIGHT_LIMIT), 20,
 //                .3, 10, WEIGHT_LIMIT, 1, 2).start();
-        MyAntColony colony = new MyAntColony(new MyGraph(graph.debugFrequentItemSets((int)500), WEIGHT_LIMIT), null)
-                .setAlpha(1.0)
-                .setBeta(2.0)
-                .setNrOfAnts(5)
-                .setCapacity(WEIGHT_LIMIT)
-                .setPheromonePersistence(.1);
-        ColonyManager cm = new ColonyManager();
-        cm.addColony(colony);
-        cm.run(5);
+//        MyAntColony newColony = new MyAntColony(new MyGraph(graph.debugFrequentItemSets((int)500), WEIGHT_LIMIT), null)
+//                .setAlpha(1.0)
+//                .setBeta(2.0)
+//                .setNrOfAnts(5)
+//                .setCapacity(WEIGHT_LIMIT)
+//                .setPheromonePersistence(.1);
+//        ColonyManager cm = new ColonyManager();
+//        cm.addColony(newColony);
+//        cm.run(5);
 
 
         long antColonyTime = System.nanoTime() - startTime;

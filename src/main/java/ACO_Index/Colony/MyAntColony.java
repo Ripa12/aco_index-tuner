@@ -1,29 +1,27 @@
 package ACO_Index.Colony;
 
 import ACO_Index.Knapsack.Knapsack;
-import ACO_Index.MyPheromone;
-import ACO_Index.Objectives.MyAbstractObjective;
-import ACO_Index.Solution;
-
-import java.util.ArrayList;
-import java.util.List;
+import ACO_Index.Solutions.AbstractSolution;
+import ACO_Index.Solutions.Solution;
 
 /**
  * Created by Richard on 2017-12-30.
  */
 public class MyAntColony {
 
-    private Solution bestSolution;
+    private AbstractSolution bestSolution;
 
     private int nrOfAnts;
+    private int nrOfIterations;
 
-    MyAnt[] ants; // ToDo: Simple array instead
+    private MyAnt[] ants; // ToDo: Simple array instead
     private Knapsack knapsack;
 
     public MyAntColony(Knapsack knapsack){
 
         this.knapsack = knapsack;
         this.nrOfAnts = 0;
+        this.nrOfIterations = 0;
 
         ants = null;
     }
@@ -37,6 +35,10 @@ public class MyAntColony {
         return this;
     }
 
+    public MyAntColony setNrOfIterations(int nr){
+        this.nrOfIterations = nr;
+        return this;
+    }
 
     public void start(){
 
@@ -44,16 +46,16 @@ public class MyAntColony {
 
         bestSolution.clear();
         for(MyAnt ant : ants){
-            ant.findSolution();
+            ant.findSolution(knapsack);
 
             // ToDo: this is where pareto front should be
-            if(bestSolution.getSupportCountQuality() < ant.getSolution().getSupportCountQuality()){
-                bestSolution.setSupportCountQuality(ant.getSolution().getSupportCountQuality());
+            if(bestSolution.getQuality(0) < ant.getSolution().getQuality(0)){
+                bestSolution.setQuality(0, ant.getSolution().getQuality(0));
                 //localBestSupportCountSolution = ant.getSolution();
             }
-            if(bestSolution.getWriteQuality() > ant.getSolution().getWriteQuality()){
-                bestSolution.setWriteQuality(ant.getSolution().getWriteQuality());
-                //localBestWritesSolution = ant.getSolution();
+            if(bestSolution.getQuality(1) > ant.getSolution().getQuality(0)){
+                bestSolution.setQuality(1, ant.getSolution().getQuality(0));
+                //localBestSupportCountSolution = ant.getSolution();
             }
         }
 

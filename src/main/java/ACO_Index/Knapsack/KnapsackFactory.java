@@ -23,12 +23,16 @@ public class KnapsackFactory implements IKnapsackFactory{
     private double beta;
     private double capacity;
 
-    public KnapsackFactory(List<Graph.ItemSet> data) {
+    private KnapsackFactory(List<Graph.ItemSet> data) {
         this.data = data;
         this.persistence = DEFAULT_PERSISTENCE;
         this.alpha = DEFAULT_ALPHA;
         this.beta = DEFAULT_Beta;
         this.capacity = DEFAULT_CAPACITY;
+    }
+
+    public static KnapsackFactory getFactory(List<Graph.ItemSet> data){
+        return new KnapsackFactory(data);
     }
 
     public KnapsackFactory setPersisitence(double p){
@@ -49,8 +53,8 @@ public class KnapsackFactory implements IKnapsackFactory{
     }
 
     @Override
-    public Knapsack buildKnapsack(int capacity){
-        Knapsack knapsack = null;
+    public Knapsack buildKnapsack(){
+        Knapsack knapsack;
 
         int nrOfNodes = data.size();
 

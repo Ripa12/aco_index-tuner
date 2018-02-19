@@ -1,9 +1,9 @@
 package ACO_Index.Knapsack;
 
 import ACO_Index.Constraints.MyConstraint;
-import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.MyAbstractObjective;
-import ACO_Index.Solution;
+import ACO_Index.Objectives.ObjectiveIterator;
+import ACO_Index.Solutions.AbstractSolution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Knapsack {
 
     private List<MyAbstractObjective> objectives;
+    private ObjectiveIterator objIterator;
 
     private double alpha;
     private double beta;
@@ -29,7 +30,7 @@ public class Knapsack {
     private double[] weights;
 
     // ToDo: MyConstraint instead of double[] weights
-    public Knapsack(double[] weights, double cap, double alpha, double beta) {
+    Knapsack(double[] weights, double cap, double alpha, double beta) {
 
         this.alpha = alpha;
         this.beta = beta;
@@ -38,6 +39,8 @@ public class Knapsack {
 
         this.nrOfNodes = weights.length;
         this.capacity = cap;
+
+        objectives = new ArrayList<>();
 
     }
 
@@ -61,7 +64,7 @@ public class Knapsack {
         objectives.add(obj);
     }
 
-    public void updatePheromone(int objective, Solution globalBestSolution){
+    public void updatePheromone(int objective, AbstractSolution globalBestSolution){
         objectives.get(objective).updatePheromone(globalBestSolution.getSolution());
     }
 
@@ -77,7 +80,7 @@ public class Knapsack {
         }
     }
 
-    public void incrementQuality(int position, Solution solution){
+    public void incrementQuality(int position, AbstractSolution solution){
         for (int i = 0; i < objectives.size(); i++){
             solution.incrementQuality(i, objectives.get(i).getValue(position));
         }
@@ -97,7 +100,7 @@ public class Knapsack {
         return neighbours;
     }
 
-    public double calculateProbabilities(int currentIndex, int objective, List<Integer> neighbours, double[] outProbabilities){
+    private double calculateProbabilities(int currentIndex, MyAbstractObjective objective, List<Integer> neighbours, double[] outProbabilities){
         double total = 0;
 
         int neighbourIndex = 0;
@@ -110,7 +113,7 @@ public class Knapsack {
                 heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex)/weights[neighbourIndex], beta);
             }
 
-            double p = Math.pow(objectives.get(objective).getPheromone(currentIndex, neighbourIndex), alpha);
+            double p = Math.pow(objective.getPheromone(currentIndex, neighbourIndex), alpha);
 
             outProbabilities[i] = heuristics * p;
 
@@ -123,6 +126,27 @@ public class Knapsack {
             sumProbability += outProbabilities[i] / total;
         }
         return sumProbability;
+    }
+
+    public int getNextItemRandomObjective(int currentPosition, List<Integer> neighbours) {
+
+        int object = Math.random() < 0.5 ? 0 : 1; // ToDo: Only two objectives as of now
+
+        double[] probabilities = new double[neighbours.size()];
+        double sumProbability = calculateProbabilities(currentPosition, objectives.get(object), neighbours, probabilities);
+
+        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
+
+        double total = 0;
+
+        for (int i = 0; i < neighbours.size(); i++) {
+            total += probabilities[i];
+            if (total >= rand) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
 //    private int getNextItem(List<MyAbstractObjective> objectives, MyPheromone pheromone, int currentIndex, List<Integer> neighbours) {
@@ -166,5 +190,7 @@ public class Knapsack {
 //
 //        return -1;
 //    }
+
+
 
 }

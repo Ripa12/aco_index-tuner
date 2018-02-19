@@ -1,10 +1,9 @@
 package ACO_Index.Colony;
 
 import ACO_Index.Knapsack.Knapsack;
-import ACO_Index.Solution;
+import ACO_Index.Solutions.AbstractSolution;
+import ACO_Index.Solutions.Solution;
 
-import java.util.BitSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,19 +14,14 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class MyAnt {
     private int index;
-    private Knapsack knapsack;
-
-    Solution solution;
-    private int currentPosition;
+    private AbstractSolution solution;
 
     public MyAnt(int index, Knapsack knapsack){
-        this.knapsack = knapsack;
         this.index = index;
-        this.solution = new Solution(knapsack.getNumberOfObjectives());
-
+        this.solution = new AbstractSolution(knapsack.getNumberOfObjectives());
     }
 
-    public Solution getSolution(){
+    public AbstractSolution getSolution(){
         return solution;
     }
 
@@ -35,11 +29,13 @@ public class MyAnt {
         return index;
     }
 
-    public void findSolution(){
+    public void findSolution(Knapsack knapsack){
         solution.clear();
 
-        currentPosition = knapsack.getRandomPosition();
+        int currentPosition = knapsack.getRandomPosition();
+
         solution.add(currentPosition);
+        knapsack.incrementQuality(currentPosition, solution);
 //        writesQuality = knapsack.getWrites(currentPosition);
 //        supportCountQuality = knapsack.getProfit(currentPosition);
         double currentWeight = knapsack.getWeight(currentPosition);
@@ -48,7 +44,7 @@ public class MyAnt {
 
         while (neighbours.size()>0){
             // ToDo: Only supports 2 objectives as of now
-            int nextPosition = getNextItem(currentPosition, Math.random() < 0.5 ? 0 : 1, neighbours);
+            int nextPosition = knapsack.getNextItemRandomObjective(currentPosition, neighbours);
 
             neighbours.remove(nextPosition);
 
@@ -64,26 +60,6 @@ public class MyAnt {
         }
         System.out.println("Weight: " +  currentWeight);
         System.out.println(solution);
-    }
-
-    // ToDo: Pass MyAbstractObjective instance as parameter
-    private int getNextItem(int currentIndex, int objective, List<Integer> neighbours) {
-
-        double[] probabilities = new double[neighbours.size()];
-        double sumProbability = knapsack.calculateProbabilities(currentIndex, objective, neighbours, probabilities);
-
-        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
-
-        double total = 0;
-
-        for (int i = 0; i < neighbours.size(); i++) {
-            total += probabilities[i];
-            if (total >= rand) {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
 }
