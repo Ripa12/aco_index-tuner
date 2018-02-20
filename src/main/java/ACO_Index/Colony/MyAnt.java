@@ -1,8 +1,7 @@
 package ACO_Index.Colony;
 
 import ACO_Index.Knapsack.Knapsack;
-import ACO_Index.Solutions.AbstractSolution;
-import ACO_Index.Solutions.Solution;
+import ACO_Index.Knapsack.KnapsackSolution;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,14 +13,14 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class MyAnt {
     private int index;
-    private AbstractSolution solution;
+    private KnapsackSolution solution;
 
     public MyAnt(int index, Knapsack knapsack){
         this.index = index;
-        this.solution = new AbstractSolution(knapsack.getNumberOfObjectives());
+        this.solution = knapsack.newSolution();//new AbstractSolution(knapsack.getNumberOfObjectives());
     }
 
-    public AbstractSolution getSolution(){
+    public KnapsackSolution getSolution(){
         return solution;
     }
 
@@ -35,7 +34,7 @@ public class MyAnt {
         int currentPosition = knapsack.getRandomPosition();
 
         solution.add(currentPosition);
-        knapsack.incrementQuality(currentPosition, solution);
+        solution.incrementQuality(currentPosition);
 //        writesQuality = knapsack.getWrites(currentPosition);
 //        supportCountQuality = knapsack.getProfit(currentPosition);
         double currentWeight = knapsack.getWeight(currentPosition);
@@ -45,21 +44,24 @@ public class MyAnt {
         while (neighbours.size()>0){
             // ToDo: Only supports 2 objectives as of now
             int nextPosition = knapsack.getNextItemRandomObjective(currentPosition, neighbours);
+            currentPosition = neighbours.get(nextPosition);
 
             neighbours.remove(nextPosition);
 
+            //nextPosition = currentPosition;
+            solution.add(currentPosition);
+            solution.incrementQuality(currentPosition);
+
+
+
             knapsack.pruneNeighbours(neighbours, currentWeight);
 
-            currentPosition = nextPosition;
-            solution.add(nextPosition);
-
-            knapsack.incrementQuality(nextPosition, solution);
 //            supportCountQuality += knapsack.getProfit(nextPosition);
 //            writesQuality += knapsack.getWrites(nextPosition);
-            currentWeight += knapsack.getWeight(nextPosition);
+            currentWeight += knapsack.getWeight(currentPosition);
         }
-        System.out.println("Weight: " +  currentWeight);
-        System.out.println(solution);
+        //System.out.println("Weight: " +  currentWeight);
+        //solution.print();
     }
 
 }

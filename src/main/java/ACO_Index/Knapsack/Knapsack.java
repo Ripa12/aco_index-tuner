@@ -3,7 +3,6 @@ package ACO_Index.Knapsack;
 import ACO_Index.Constraints.MyConstraint;
 import ACO_Index.Objectives.MyAbstractObjective;
 import ACO_Index.Objectives.ObjectiveIterator;
-import ACO_Index.Solutions.AbstractSolution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,10 @@ public class Knapsack {
 
     }
 
+    public KnapsackSolution newSolution(){
+        return new KnapsackSolution(objectives.toArray(new MyAbstractObjective[objectives.size()]), objectives.size());
+    }
+
     public int getNumberOfItems(){
         return nrOfNodes;
     }
@@ -64,8 +67,10 @@ public class Knapsack {
         objectives.add(obj);
     }
 
-    public void updatePheromone(int objective, AbstractSolution globalBestSolution){
-        objectives.get(objective).updatePheromone(globalBestSolution.getSolution());
+    public void updatePheromones(KnapsackSolution globalBestSolution){
+        for(int objective = 0; objective < objectives.size(); objective++) {
+            objectives.get(objective).updatePheromone(globalBestSolution.getSolution());
+        }
     }
 
     public void reset(){
@@ -77,12 +82,6 @@ public class Knapsack {
     public void evaporate(){
         for(MyAbstractObjective p : objectives){
             p.evaporate();
-        }
-    }
-
-    public void incrementQuality(int position, AbstractSolution solution){
-        for (int i = 0; i < objectives.size(); i++){
-            solution.incrementQuality(i, objectives.get(i).getValue(position));
         }
     }
 

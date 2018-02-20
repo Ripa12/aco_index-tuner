@@ -4,6 +4,7 @@ import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.MyAbstractObjective;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Richard on 2018-01-04.
@@ -16,32 +17,40 @@ public class SupportCountObjective extends MyAbstractObjective {
         super(array, pheromone);
 
         sumSupportCount = Arrays.stream(valueArray).reduce(Double::sum).getAsDouble();
+        this.bestQuality = 0;
     }
 
     private SupportCountObjective(double[] array, MyPheromone pheromone, double sumSupportCount){
         super(array, pheromone);
 
         this.sumSupportCount = sumSupportCount;
+        this.bestQuality = 0;
     }
 
     @Override
     public void reset() {
         pheromone.reset(sumSupportCount);
-        bestQuality = 0;
+        //bestQuality = 0;
     }
 
     @Override
-    public boolean isEqual(MyAbstractObjective other) {
-        return false;
+    public double getInitialValue() {
+        return 0;
+    }
+
+
+    @Override
+    public boolean isEqual(double other) {
+        return bestQuality == other;
     }
 
     @Override
-    public boolean isBetter(MyAbstractObjective other) {
-        return false;
+    public boolean isBetter(double other) {
+        return other > bestQuality;
     }
 
     @Override
-    public void updatePheromone(Integer[] solution) {
+    public void updatePheromone(List<Integer> solution) {
         pheromone.update((1/bestQuality), bestQuality, solution);
     }
 

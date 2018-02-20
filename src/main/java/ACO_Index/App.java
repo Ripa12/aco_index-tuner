@@ -78,7 +78,7 @@ public class App
         //new GeneticAlgorithm(graph.debugFrequentItemSets(500), WEIGHT_LIMIT);
         long gaTime = System.nanoTime() - startTime;
         startTime = System.nanoTime();
-        DynamicProgramming.solveKP(graph.debugFrequentItemSets((int)10), WEIGHT_LIMIT);
+        DynamicProgramming.solveKP(graph.debugFrequentItemSets((int)500), WEIGHT_LIMIT);
         long dpTime = System.nanoTime() - startTime;
         //DynamicProgramming.calcSolution(graph.debugFrequentItemSets((int)30), WEIGHT_LIMIT);
 //        long frequentItemSetBuildTime = System.nanoTime() - startTime;

@@ -2,6 +2,8 @@ package ACO_Index.Objectives;
 
 import ACO_Index.MyPheromone;
 
+import java.util.List;
+
 /**
  * Created by Richard on 2017-12-31.
  */
@@ -57,11 +59,13 @@ public abstract class MyAbstractObjective {
 
     public abstract void reset();
 
-    // ToDo: maybe make classes below Static!
-    public abstract boolean isEqual(MyAbstractObjective other);
-    public abstract boolean isBetter(MyAbstractObjective other);
+    public abstract double getInitialValue();
 
-    public abstract void updatePheromone(Integer[] solution);
+    // ToDo: maybe make classes below Static!
+    public abstract boolean isEqual(double other);
+    public abstract boolean isBetter(double other);
+
+    public abstract void updatePheromone(List<Integer> solution);
 
     public abstract double calculateHeuristic(int index);
 

@@ -3,6 +3,7 @@ package ACO_Index;
 import ACO_Index.Objectives.MyAbstractObjective;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Richard on 2018-01-04.
@@ -48,7 +49,7 @@ public class MyPheromone {
 
     }
 
-    public void update(double factor, double bestQuality, Integer[] solution){
+    public void update(double factor, double bestQuality, List<Integer> solution){
         updatePheromoneLevel(bestQuality);
 
         for (int i : solution) {

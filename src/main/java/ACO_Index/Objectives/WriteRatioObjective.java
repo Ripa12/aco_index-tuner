@@ -4,6 +4,7 @@ import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.MyAbstractObjective;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Richard on 2018-01-04.
@@ -17,6 +18,7 @@ public class WriteRatioObjective extends MyAbstractObjective {
 
         sumWriteRatio = Arrays.stream(valueArray).reduce(Double::sum).getAsDouble(); // ToDo: + 1 maybe to avoid division by zero
         maxWriteRatio = Arrays.stream(valueArray).reduce(Double::max).getAsDouble();
+        this.bestQuality = Double.MAX_VALUE;
     }
 
     private WriteRatioObjective(double[] vArray, MyPheromone pheromone, double sumWriteRatio, double maxWriteRatio) {
@@ -24,26 +26,33 @@ public class WriteRatioObjective extends MyAbstractObjective {
 
         this.sumWriteRatio = sumWriteRatio; // ToDo: + 1 maybe to avoid division by zero
         this.maxWriteRatio = maxWriteRatio;
+        this.bestQuality = Double.MAX_VALUE;
     }
 
     @Override
     public void reset() {
         pheromone.reset(sumWriteRatio);
-        bestQuality = Double.MAX_VALUE;
+        //bestQuality = Double.MAX_VALUE;
     }
 
     @Override
-    public boolean isEqual(MyAbstractObjective other) {
-        return false;
+    public double getInitialValue() {
+        return Double.MAX_VALUE;
+    }
+
+
+    @Override
+    public boolean isEqual(double other) {
+        return other == bestQuality;
     }
 
     @Override
-    public boolean isBetter(MyAbstractObjective other) {
-        return false;
+    public boolean isBetter(double other) {
+        return other < bestQuality;
     }
 
     @Override
-    public void updatePheromone(Integer[] solution)  {
+    public void updatePheromone(List<Integer> solution)  {
         pheromone.update((1/(sumWriteRatio - bestQuality)), bestQuality, solution); // ToDo: Maybe 1/bestQuality is enough?
     }
 

@@ -1,15 +1,14 @@
 package ACO_Index.Colony;
 
 import ACO_Index.Knapsack.Knapsack;
-import ACO_Index.Solutions.AbstractSolution;
-import ACO_Index.Solutions.Solution;
+import ACO_Index.Knapsack.KnapsackSolution;
 
 /**
  * Created by Richard on 2017-12-30.
  */
 public class MyAntColony {
 
-    private AbstractSolution bestSolution;
+    private KnapsackSolution bestSolution;
 
     private int nrOfAnts;
     private int nrOfIterations;
@@ -23,6 +22,7 @@ public class MyAntColony {
         this.nrOfAnts = 0;
         this.nrOfIterations = 0;
 
+        this.bestSolution = knapsack.newSolution();//new KnapsackSolution(knapsack.getNumberOfObjectives());
         ants = null;
     }
 
@@ -42,23 +42,36 @@ public class MyAntColony {
 
     public void start(){
 
-        knapsack.reset();
-
         bestSolution.clear();
-        for(MyAnt ant : ants){
-            ant.findSolution(knapsack);
 
-            // ToDo: this is where pareto front should be
-            if(bestSolution.getQuality(0) < ant.getSolution().getQuality(0)){
-                bestSolution.setQuality(0, ant.getSolution().getQuality(0));
-                //localBestSupportCountSolution = ant.getSolution();
+
+        while(nrOfIterations > 0) {
+            nrOfIterations--;
+
+            knapsack.reset();
+            for (MyAnt ant : ants) {
+                ant.findSolution(knapsack);
+
+
+                // ToDo: this is where pareto front should be
+                bestSolution.isGreater(ant.getSolution());
+//                if (bestSolution.getQuality(0) < ant.getSolution().getQuality(0)) {
+//                    bestSolution.setQuality(0, ant.getSolution().getQuality(0));
+//                    ant.getSolution().copy(bestSolution);
+//                    //localBestSupportCountSolution = ant.getSolution();
+//                }
+//                if (bestSolution.getQuality(1) > ant.getSolution().getQuality(1)) {
+//                    bestSolution.setQuality(1, ant.getSolution().getQuality(1));
+//                    //localBestSupportCountSolution = ant.getSolution();
+//                }
             }
-            if(bestSolution.getQuality(1) > ant.getSolution().getQuality(0)){
-                bestSolution.setQuality(1, ant.getSolution().getQuality(0));
-                //localBestSupportCountSolution = ant.getSolution();
-            }
+
+            knapsack.evaporate();
+            knapsack.updatePheromones(bestSolution);
         }
 
-        knapsack.evaporate();
+
+        bestSolution.print();
+        //bestSolution.getQuality(0);
     }
 }
