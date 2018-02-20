@@ -42,11 +42,11 @@ public class KnapsackSolution {
 
     public void clear(){
         solution.clear();
-        //Arrays.fill(qualities, 0);
+        Arrays.fill(qualities, 0);
 
-        for(int obj = 0; obj < objectives.length; obj++){
-            this.qualities[obj] = objectives[obj].getInitialValue();
-        }
+//        for(int obj = 0; obj < objectives.length; obj++){
+//            this.qualities[obj] = objectives[obj].getInitialValue();
+//        }
     }
 
     public List<Integer> getSolution(){
@@ -74,6 +74,7 @@ public class KnapsackSolution {
                 isGreater = true;
             }
         }
+
 
 //        if (bestSolution.getQuality(0) < ant.getSolution().getQuality(0)) {
 //            bestSolution.setQuality(0, ant.getSolution().getQuality(0));

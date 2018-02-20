@@ -63,15 +63,21 @@ public class MyAnt {
             int nextPosition = getNextItem(neighbours, Math.random() < 0.5 ? 0 : 1, alpha, beta);
             //int nextPosition = getNextItem(neighbours, 0, alpha, beta);
 
+            currentPosition = neighbours.get(nextPosition);
             neighbours.remove(nextPosition);
 
             graph.pruneNeighbours(neighbours, capacity, currentWeight);
 
-            currentPosition = nextPosition;
-            solution.add(nextPosition);
-            supportCountQuality += graph.getProfit(nextPosition);
-            writesQuality += graph.getWrites(nextPosition);
-            currentWeight += graph.getWeight(nextPosition);
+
+            solution.add(currentPosition);
+            supportCountQuality += graph.getProfit(currentPosition);
+            writesQuality += graph.getWrites(currentPosition);
+            currentWeight += graph.getWeight(currentPosition);
+
+//            solution.add(nextPosition);
+//            supportCountQuality += graph.getProfit(nextPosition);
+//            writesQuality += graph.getWrites(nextPosition);
+//            currentWeight += graph.getWeight(nextPosition);
         }
         System.out.println("Weight: " +  currentWeight);
         System.out.println(solution);

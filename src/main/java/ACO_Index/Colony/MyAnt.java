@@ -54,14 +54,15 @@ public class MyAnt {
 
 
 
+            currentWeight += knapsack.getWeight(currentPosition);
             knapsack.pruneNeighbours(neighbours, currentWeight);
 
 //            supportCountQuality += knapsack.getProfit(nextPosition);
 //            writesQuality += knapsack.getWrites(nextPosition);
-            currentWeight += knapsack.getWeight(currentPosition);
+
         }
-        //System.out.println("Weight: " +  currentWeight);
-        //solution.print();
+        System.out.println("Weight: " +  currentWeight);
+        solution.print();
     }
 
 }
