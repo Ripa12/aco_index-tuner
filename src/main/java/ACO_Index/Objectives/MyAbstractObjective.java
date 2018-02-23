@@ -1,6 +1,8 @@
 package ACO_Index.Objectives;
 
+import ACO_Index.Knapsack.KnapsackSolution;
 import ACO_Index.MyPheromone;
+import com.google.common.collect.ImmutableCollection;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public abstract class MyAbstractObjective {
 
     protected double bestQuality;
 
-    //private double totalValue;
+    protected List<Integer> bestSolution;
 
     public MyAbstractObjective(double[] vArray, MyPheromone pheromone){
         this.valueArray = vArray;
@@ -27,26 +29,30 @@ public abstract class MyAbstractObjective {
         this.bestQuality = Double.MIN_VALUE;
     }
 
-    public boolean updateBestQuality(double other){
-        boolean isGreater = false;
-
-        if(bestQuality < other){
-            bestQuality = other;
-            isGreater = true;
-        }
-
-        return isGreater;
-    }
+//    public boolean updateBestQuality(double other){
+//        boolean isGreater = false;
+//
+//        if(bestQuality < other){
+//            bestQuality = other;
+//            isGreater = true;
+//        }
+//
+//        return isGreater;
+//    }
 
     public double getValue(int index){
         return valueArray[index];
     }
 
-    public double getBestQuality(){
-        return bestQuality;
-    }
+//    public double getBestQuality(){
+//        return bestQuality;
+//    }
     public void setBestQuality(double quality){
         bestQuality = quality;
+    }
+
+    public void setBestSolution(List<Integer> solution){
+        this.bestSolution = solution;
     }
 
     public double getPheromone(int from, int to){
@@ -62,10 +68,11 @@ public abstract class MyAbstractObjective {
     public abstract double getInitialValue();
 
     // ToDo: maybe make classes below Static!
-    public abstract boolean isEqual(double other);
+    //public abstract boolean isEqual(double other);
     public abstract boolean isBetter(double other);
+    public abstract boolean isBetter(double first, double second);
 
-    public abstract void updatePheromone(List<Integer> solution);
+    public abstract void updatePheromone();
 
     public abstract double calculateHeuristic(int index);
 

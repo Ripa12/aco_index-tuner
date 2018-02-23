@@ -2,13 +2,14 @@ package ACO_Index.Colony;
 
 import ACO_Index.Knapsack.Knapsack;
 import ACO_Index.Knapsack.KnapsackSolution;
+import ACO_Index.Solutions.ParetoFront;
 
 /**
  * Created by Richard on 2017-12-30.
  */
 public class MyAntColony {
 
-    private KnapsackSolution bestSolution;
+    private ParetoFront paretoFront;
 
     private int nrOfAnts;
     private int nrOfIterations;
@@ -22,7 +23,7 @@ public class MyAntColony {
         this.nrOfAnts = 0;
         this.nrOfIterations = 0;
 
-        this.bestSolution = knapsack.newSolution();//new KnapsackSolution(knapsack.getNumberOfObjectives());
+        this.paretoFront = new ParetoFront();
         ants = null;
     }
 
@@ -42,7 +43,7 @@ public class MyAntColony {
 
     public void start(){
 
-        bestSolution.clear();
+        //bestSolution.clear();
 
 
         while(nrOfIterations > 0) {
@@ -52,26 +53,18 @@ public class MyAntColony {
             for (MyAnt ant : ants) {
                 ant.findSolution(knapsack);
 
-
                 // ToDo: this is where pareto front should be
-                bestSolution.isGreater(ant.getSolution());
-//                if (bestSolution.getQuality(0) < ant.getSolution().getQuality(0)) {
-//                    bestSolution.setQuality(0, ant.getSolution().getQuality(0));
-//                    ant.getSolution().copy(bestSolution);
-//                    //localBestSupportCountSolution = ant.getSolution();
-//                }
-//                if (bestSolution.getQuality(1) > ant.getSolution().getQuality(1)) {
-//                    bestSolution.setQuality(1, ant.getSolution().getQuality(1));
-//                    //localBestSupportCountSolution = ant.getSolution();
-//                }
+                //bestSolution.isGreater(ant.getSolution());
+                this.paretoFront.insert(ant.getSolution());
             }
 
             knapsack.evaporate();
-            knapsack.updatePheromones(bestSolution);
+            knapsack.updatePheromones();
         }
 
 
-        bestSolution.print();
+        this.paretoFront.printAll();
+        //bestSolution.print();
         //bestSolution.getQuality(0);
     }
 }

@@ -41,10 +41,10 @@ public class WriteRatioObjective extends MyAbstractObjective {
     }
 
 
-    @Override
-    public boolean isEqual(double other) {
-        return other == bestQuality;
-    }
+//    @Override
+//    public boolean isEqual(double other) {
+//        return other == bestQuality;
+//    }
 
     @Override
     public boolean isBetter(double other) {
@@ -52,8 +52,13 @@ public class WriteRatioObjective extends MyAbstractObjective {
     }
 
     @Override
-    public void updatePheromone(List<Integer> solution)  {
-        pheromone.update((1/(sumWriteRatio - bestQuality)), bestQuality, solution); // ToDo: Maybe 1/bestQuality is enough?
+    public boolean isBetter(double first, double second) {
+        return second < first;
+    }
+
+    @Override
+    public void updatePheromone()  {
+        pheromone.update((1/(sumWriteRatio - bestQuality)), bestQuality, bestSolution); // ToDo: Maybe 1/bestQuality is enough?
     }
 
     @Override

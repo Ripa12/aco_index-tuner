@@ -67,9 +67,9 @@ public class Knapsack {
         objectives.add(obj);
     }
 
-    public void updatePheromones(KnapsackSolution globalBestSolution){
+    public void updatePheromones(){
         for(int objective = 0; objective < objectives.size(); objective++) {
-            objectives.get(objective).updatePheromone(globalBestSolution.getSolution());
+            objectives.get(objective).updatePheromone();
         }
     }
 
@@ -122,7 +122,8 @@ public class Knapsack {
         double sumProbability = 0.0;
 
         for (int i = 0; i < neighbours.size(); i++) {
-            sumProbability += outProbabilities[i] / total;
+            outProbabilities[i] /= total;
+            sumProbability += outProbabilities[i];
         }
         return sumProbability;
     }

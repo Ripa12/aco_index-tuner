@@ -61,8 +61,8 @@ public class MyAnt {
 //            writesQuality += knapsack.getWrites(nextPosition);
 
         }
-        System.out.println("Weight: " +  currentWeight);
-        solution.print();
+        //System.out.println("Weight: " +  currentWeight);
+        //solution.print();
     }
 
 }

@@ -39,10 +39,10 @@ public class SupportCountObjective extends MyAbstractObjective {
     }
 
 
-    @Override
-    public boolean isEqual(double other) {
-        return bestQuality == other;
-    }
+//    @Override
+//    public boolean isEqual(double other) {
+//        return bestQuality == other;
+//    }
 
     @Override
     public boolean isBetter(double other) {
@@ -50,8 +50,13 @@ public class SupportCountObjective extends MyAbstractObjective {
     }
 
     @Override
-    public void updatePheromone(List<Integer> solution) {
-        pheromone.update((1/bestQuality), bestQuality, solution);
+    public boolean isBetter(double first, double second) {
+        return second > first;
+    }
+
+    @Override
+    public void updatePheromone() {
+        pheromone.update((1/bestQuality), bestQuality, bestSolution);
     }
 
     @Override

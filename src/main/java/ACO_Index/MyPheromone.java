@@ -46,7 +46,6 @@ public class MyPheromone {
                 pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
             }
         }
-
     }
 
     public void update(double factor, double bestQuality, List<Integer> solution){
