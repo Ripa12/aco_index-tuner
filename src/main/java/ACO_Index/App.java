@@ -5,8 +5,7 @@ package ACO_Index;
 //import ACO_Index.ALT_ACO.MaxMinAntSystem;
 //import ACO_Index.ALT_ACO.Problem;
 import ACO_Index.DP.DynamicProgramming;
-import ACO_Index.GA.Genetic;
-import ACO_Index.GA.GeneticAlgorithm;
+import ACO_Index.DataMining.Graph;
 import ACO_Index.Knapsack.KnapsackFactory;
 import org.apache.log4j.BasicConfigurator;
 
@@ -29,7 +28,7 @@ public class App
         BasicConfigurator.configure();
 
         long startTime = System.nanoTime();
-        DataSampleGenerator.generateDataSample(NR_OF_ATTRIBUTES, NR_OF_TRANSACTIONS, TRANSACTION_LENGTH, 5, 10, "TestData.txt");
+        //DataSampleGenerator.generateDataSample(NR_OF_ATTRIBUTES, NR_OF_TRANSACTIONS, TRANSACTION_LENGTH, 5, 100, "TestData.txt");
         long transactionBuildTime = System.nanoTime() - startTime;
 
         startTime = System.nanoTime();
@@ -37,10 +36,12 @@ public class App
         long graphBuildTime = System.nanoTime() - startTime;
 
         startTime = System.nanoTime();
+
+
         ACO_Index.Colony.MyAntColony colony = new ACO_Index.Colony.MyAntColony(KnapsackFactory
-                .getFactory(graph.debugFrequentItemSets((int)500)).buildKnapsack())
+                .getFactory(graph.debugFrequentItemSets((int)250)).buildKnapsack())
                 .setNrOfAnts(NR_OF_ANTS)
-                .setNrOfIterations(5);
+                .setNrOfIterations(10);
         colony.start();
 
 
@@ -78,7 +79,7 @@ public class App
         //new GeneticAlgorithm(graph.debugFrequentItemSets(500), WEIGHT_LIMIT);
         long gaTime = System.nanoTime() - startTime;
         startTime = System.nanoTime();
-        DynamicProgramming.solveKP(graph.debugFrequentItemSets((int)500), WEIGHT_LIMIT);
+        DynamicProgramming.solveKP(graph.debugFrequentItemSets((int)250), WEIGHT_LIMIT);
         long dpTime = System.nanoTime() - startTime;
         //DynamicProgramming.calcSolution(graph.debugFrequentItemSets((int)30), WEIGHT_LIMIT);
 //        long frequentItemSetBuildTime = System.nanoTime() - startTime;

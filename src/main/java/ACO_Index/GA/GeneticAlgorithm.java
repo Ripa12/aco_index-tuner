@@ -16,9 +16,9 @@ package ACO_Index.GA;
  */
 
 
-import ACO_Index.Graph;
+import ACO_Index.DataMining.Graph;
+import ACO_Index.DataMining.ItemSet;
 
-import java.io.Console;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
@@ -26,12 +26,11 @@ import java.io.PrintStream;
 import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class GeneticAlgorithm {
 
-    private List<Graph.ItemSet> data;
+    private List<ItemSet> data;
 
     private static final int POPULATION_SIZE = 500;
     private static final int MAXIMUM_GENERATIONS = 2000;
@@ -96,7 +95,7 @@ public class GeneticAlgorithm {
     /**
      * Default constructor
      */
-    public GeneticAlgorithm(List<Graph.ItemSet> data, int capacity) {
+    public GeneticAlgorithm(List<ItemSet> data, int capacity) {
 
         this.data = data;
 
@@ -581,7 +580,7 @@ public class GeneticAlgorithm {
     /**
      * Collects user input to be used as parameters for knapsack problem
      */
-    private void getInput(List<Graph.ItemSet> data, int capacity) {
+    private void getInput(List<ItemSet> data, int capacity) {
 
         // Hold user input, line by line
         String input;

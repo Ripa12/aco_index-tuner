@@ -1,5 +1,8 @@
 package ACO_Index;
 
+import ACO_Index.DataMining.Graph;
+import ACO_Index.DataMining.ItemSet;
+
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,7 +26,7 @@ public class MyGraph {
     private double maxWritesR;
     private double sumWritesR;
     private double weightR;
-    public MyGraph(List<Graph.ItemSet> data, int cap){
+    public MyGraph(List<ItemSet> data, int cap){
         nrOfNodes = data.size();
 
         this.pheromoneMatrices = new double[NUMBER_OF_OBJECTIVES][nrOfNodes][nrOfNodes];

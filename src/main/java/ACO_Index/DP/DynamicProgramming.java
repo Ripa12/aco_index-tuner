@@ -1,12 +1,11 @@
 package ACO_Index.DP;
 
-import ACO_Index.Graph;
+import ACO_Index.DataMining.Graph;
+import ACO_Index.DataMining.ItemSet;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 // A Dynamic Programming based solution for 0-1 Knapsack problem
 public class DynamicProgramming {
@@ -127,7 +126,7 @@ public class DynamicProgramming {
 
 
     // Driver program to test above function
-    public static void solveKP(List<Graph.ItemSet> data, int capacity) {
+    public static void solveKP(List<ItemSet> data, int capacity) {
 
         int n = data.size();
         int val[] = new int[n];

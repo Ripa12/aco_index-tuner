@@ -41,6 +41,8 @@ public class MyAntColony {
         return this;
     }
 
+    // ToDo: Reset pheromone matrix after stagnation (check stagnation stopping criterion for mop)
+    // ToDo: Or just regular stagnation for each individual pheromone matrix
     public void start(){
 
         //bestSolution.clear();

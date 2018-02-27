@@ -3,6 +3,7 @@ package ACO_Index;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -28,29 +29,53 @@ public class DataSampleGenerator {
             out = new PrintWriter(new OutputStreamWriter(
                     new BufferedOutputStream(new FileOutputStream(path)), "UTF-8"));
 
+
+            List<List<Integer>> sourceTables = new ArrayList<>();
+
+            int nrOfTables = ThreadLocalRandom.current().nextInt(50, 150);
+            int minBoundary = 0;
+            int maxBoundary = nrOfAttr / nrOfTables;
+            for(int i = 0; i < nrOfTables; i++){
+                sourceTables.add(IntStream.rangeClosed(minBoundary, maxBoundary-1).boxed().collect(Collectors.toList()));
+                minBoundary = maxBoundary;
+                maxBoundary += (nrOfAttr / nrOfTables);
+            }
+
             out.println(nrOfAttr);
             int nrOfTransHalf = (int)nrOfTrans/100;
-            for(long i = 0; i < nrOfAttr; i++) {
-                String line = "";
+
+            for(int i = 0; i < nrOfAttr; i++) {
+//                List<Integer> tempTableList = sourceTables.get(i);
+//                int tableSize = tempTableList.size();
+//                out.println(tableSize);
+//                for(int j = 0; j < tableSize; j++) {
 
                 int weight = ThreadLocalRandom.current().nextInt(minWeight, maxWeight + 1);
+
                 int writeToRead = ThreadLocalRandom.current().nextInt(0, nrOfTransHalf + 1);
 
+                String line = "";
                 line += i + " " + weight + " " + writeToRead;
                 out.println(line);
+//                }
             }
 
-            List<Integer> source = IntStream.rangeClosed(0, nrOfAttr-1).boxed().collect(Collectors.toList());
-            for(long i = 0; i < nrOfTrans; i++) {
-                String line = "";
 
-                List<Integer> pool = new LinkedList<>(source);
+            for(int i = 0; i < nrOfTrans; i++) {
+                int tableIndex = ThreadLocalRandom.current().nextInt(0, nrOfTables);
+
+                StringBuilder line = new StringBuilder(Integer.toString(tableIndex) + " ");
+
+                List<Integer> pool = new ArrayList<>(sourceTables.get(tableIndex));
                 int transactionLength = ThreadLocalRandom.current().nextInt(1, transLength + 1);
                 for(int j = 0; j < transactionLength; j++) {
-                    line += pool.remove(ThreadLocalRandom.current().nextInt(0, pool.size())) + " ";
+                    line.append(pool.remove(ThreadLocalRandom.current().nextInt(0, pool.size()))).append(" ");
                 }
+
                 out.println(line);
             }
+
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -63,3 +88,4 @@ public class DataSampleGenerator {
         }
     }
 }
+

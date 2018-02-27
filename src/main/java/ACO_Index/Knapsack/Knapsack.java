@@ -1,6 +1,7 @@
 package ACO_Index.Knapsack;
 
 import ACO_Index.Constraints.MyConstraint;
+import ACO_Index.Constraints.NestedKnapsack;
 import ACO_Index.Objectives.MyAbstractObjective;
 import ACO_Index.Objectives.ObjectiveIterator;
 
@@ -14,7 +15,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Knapsack {
 
     private List<MyAbstractObjective> objectives;
-    private ObjectiveIterator objIterator;
+    //private ObjectiveIterator objIterator;
+
+    private NestedKnapsack[] nestedKnapsacks;
 
     private double alpha;
     private double beta;
@@ -23,13 +26,15 @@ public class Knapsack {
 
     private double capacity;
 
-    MyConstraint globalConstraint;
+    //MyConstraint globalConstraint;
 
 
     private double[] weights;
 
     // ToDo: MyConstraint instead of double[] weights
-    Knapsack(double[] weights, double cap, double alpha, double beta) {
+    Knapsack(NestedKnapsack[] nestedKnapsacks, double[] weights, double cap, double alpha, double beta) {
+
+        this.nestedKnapsacks = nestedKnapsacks;
 
         this.alpha = alpha;
         this.beta = beta;

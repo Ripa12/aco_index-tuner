@@ -7,4 +7,5 @@ import ACO_Index.Knapsack.Knapsack;
  */
 public interface IKnapsackFactory {
     Knapsack buildKnapsack();
+    Knapsack buildNestedKnapsack();
 }
