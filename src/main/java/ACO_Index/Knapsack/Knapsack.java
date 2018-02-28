@@ -1,9 +1,6 @@
 package ACO_Index.Knapsack;
 
-import ACO_Index.Constraints.MyConstraint;
-import ACO_Index.Constraints.NestedKnapsack;
 import ACO_Index.Objectives.MyAbstractObjective;
-import ACO_Index.Objectives.ObjectiveIterator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +16,7 @@ public class Knapsack {
 
     private NestedKnapsack[] nestedKnapsacks;
 
+
     private double alpha;
     private double beta;
 
@@ -27,7 +25,6 @@ public class Knapsack {
     private double capacity;
 
     //MyConstraint globalConstraint;
-
 
     private double[] weights;
 
@@ -96,6 +93,7 @@ public class Knapsack {
 
     public List<Integer> getNeighbours(int currentPosition, double currentWeight) {
         List<Integer> neighbours = new ArrayList<>();
+
         for (int i = 0; i < nrOfNodes; i++) {
             if (i != currentPosition && currentWeight + weights[i] < capacity) {
                 neighbours.add(i);
@@ -130,6 +128,7 @@ public class Knapsack {
             outProbabilities[i] /= total;
             sumProbability += outProbabilities[i];
         }
+
         return sumProbability;
     }
 
@@ -153,49 +152,6 @@ public class Knapsack {
 
         return -1;
     }
-
-//    private int getNextItem(List<MyAbstractObjective> objectives, MyPheromone pheromone, int currentIndex, List<Integer> neighbours) {
-//
-//        double[] probabilities = new double[neighbours.size()];
-//        double total = 0;
-//
-//        int neighbourIndex = 0;
-//        for (int i = 0; i < neighbours.size(); i++) {
-//            double heuristics = 0;
-//
-//            neighbourIndex = neighbours.get(i);
-//            for (MyAbstractObjective obj :
-//                    objectives) {
-//                heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex)/weights[neighbourIndex], beta);
-//            }
-//
-//            double p = Math.pow(pheromone.getPheromone(currentIndex, neighbourIndex), alpha);
-//
-//            probabilities[i] = heuristics * p;
-//
-//            total += probabilities[i];
-//        }
-//
-//        double sumProbability = 0.0;
-//
-//        for (int i = 0; i < neighbours.size(); i++) {
-//            sumProbability += probabilities[i] / total;
-//        }
-//
-//        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
-//
-//        total = 0;
-//
-//        for (int i = 0; i < neighbours.size(); i++) {
-//            total += probabilities[i];
-//            if (total >= rand) {
-//                return i;
-//            }
-//        }
-//
-//        return -1;
-//    }
-
 
 
 }

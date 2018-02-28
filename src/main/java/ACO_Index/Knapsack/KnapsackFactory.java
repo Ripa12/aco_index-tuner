@@ -1,14 +1,10 @@
 package ACO_Index.Knapsack;
 
-import ACO_Index.Constraints.NestedKnapsack;
-import ACO_Index.DataMining.Graph;
 import ACO_Index.DataMining.ItemSet;
 import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.SupportCountObjective;
 import ACO_Index.Objectives.WriteRatioObjective;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
