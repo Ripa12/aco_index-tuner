@@ -5,6 +5,7 @@ import ACO_Index.MyPheromone;
 import ACO_Index.Objectives.SupportCountObjective;
 import ACO_Index.Objectives.WriteRatioObjective;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public class KnapsackFactory implements IKnapsackFactory{
         double[] weights = new double[nrOfNodes];
 
         NestedKnapsack[] nestedKnapsacks = new NestedKnapsack[1];
-        nestedKnapsacks[0] = new NestedKnapsack(IntStream.rangeClosed(0, nrOfNodes).boxed().collect(Collectors.toList()));
+        nestedKnapsacks[0] = new NestedKnapsack((ArrayList<Integer>)IntStream.rangeClosed(0, nrOfNodes).boxed().collect(Collectors.toList()));
 
         for (Object o : data.entrySet()) {
             Map.Entry obj = (Map.Entry) o;
@@ -110,7 +111,7 @@ public class KnapsackFactory implements IKnapsackFactory{
             List itemSet = (List) obj.getValue();
 
             List<Integer> indexes = IntStream.rangeClosed(offset, (itemSet.size() + offset)).boxed().collect(Collectors.toList());
-            nestedKnapsacks[currentTable++] = new NestedKnapsack(indexes);
+            nestedKnapsacks[currentTable++] = new NestedKnapsack((ArrayList<Integer>) indexes);
 
             for (int i = offset; i < itemSet.size() + offset; i++) {
                 supportCount[i] = (((ItemSet) itemSet.get(i)).getKey());

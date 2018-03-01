@@ -2,6 +2,7 @@ package ACO_Index.Colony;
 
 import ACO_Index.Knapsack.Knapsack;
 import ACO_Index.Knapsack.KnapsackSolution;
+import ACO_Index.Knapsack.NestedKnapsack;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -39,20 +40,18 @@ public class MyAnt {
 //        supportCountQuality = knapsack.getProfit(currentPosition);
         double currentWeight = knapsack.getWeight(currentPosition);
 
-        List<Integer> neighbours = knapsack.getNeighbours(currentPosition, currentWeight);
+        List<NestedKnapsack.TableIndex> neighbours = knapsack.getNeighbours(currentPosition, currentWeight);
 
         while (neighbours.size()>0){
             // ToDo: Only supports 2 objectives as of now
-            int nextPosition = knapsack.getNextItemRandomObjective(currentPosition, neighbours);
-            currentPosition = neighbours.get(nextPosition);
+            NestedKnapsack.TableIndex nextPosition = knapsack.getNextItemRandomObjective(currentPosition, neighbours);
 
             neighbours.remove(nextPosition);
+            currentPosition = nextPosition.getIndex();
 
             //nextPosition = currentPosition;
             solution.add(currentPosition);
             solution.incrementQuality(currentPosition);
-
-
 
             currentWeight += knapsack.getWeight(currentPosition);
             knapsack.pruneNeighbours(neighbours, currentWeight);

@@ -1,6 +1,7 @@
 package ACO_Index.Knapsack;
 
 import ACO_Index.Objectives.MyAbstractObjective;
+import com.sun.org.apache.bcel.internal.generic.TABLESWITCH;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Knapsack {
 
-    private List<MyAbstractObjective> objectives;
+//    private List<MyAbstractObjective> objectives;
+    static List<MyAbstractObjective> objectives;
     //private ObjectiveIterator objIterator;
 
     private NestedKnapsack[] nestedKnapsacks;
@@ -22,7 +24,7 @@ public class Knapsack {
 
     private int nrOfNodes;
 
-    private double capacity;
+    static double capacity;
 
     //MyConstraint globalConstraint;
 
@@ -46,7 +48,8 @@ public class Knapsack {
     }
 
     public KnapsackSolution newSolution(){
-        return new KnapsackSolution(objectives.toArray(new MyAbstractObjective[objectives.size()]), objectives.size());
+//        return new KnapsackSolution(objectives.toArray(new MyAbstractObjective[objectives.size()]), objectives.size());
+        return new KnapsackSolution(objectives.size());
     }
 
     public int getNumberOfItems(){
@@ -87,35 +90,54 @@ public class Knapsack {
         }
     }
 
-    public void pruneNeighbours(List<Integer> neighbour, double currentWeight) {
-        neighbour.removeIf(n -> weights[n] + currentWeight > capacity);
+//    public void pruneNeighbours(List<Integer> neighbour, double currentWeight) {
+//        neighbour.removeIf(n -> weights[n] + currentWeight > capacity);
+//
+//        for(NestedKnapsack nestedKnapsack : nestedKnapsacks){
+//            nestedKnapsack.prune(neighbour);
+//        }
+//    }
+
+    public void pruneNeighbours(List<NestedKnapsack.TableIndex> neighbour, double currentWeight) {
+        for(NestedKnapsack nestedKnapsack : nestedKnapsacks){
+            nestedKnapsack.prune(neighbour, currentWeight);
+        }
     }
 
-    public List<Integer> getNeighbours(int currentPosition, double currentWeight) {
-        List<Integer> neighbours = new ArrayList<>();
+    public List<NestedKnapsack.TableIndex> getNeighbours(int currentPosition, double currentWeight) {
+        List<NestedKnapsack.TableIndex> neighbours = new ArrayList<>();
 
-        for (int i = 0; i < nrOfNodes; i++) {
-            if (i != currentPosition && currentWeight + weights[i] < capacity) {
-                neighbours.add(i);
-            }
+        for(NestedKnapsack nestedKnapsack : nestedKnapsacks){
+            neighbours.addAll(nestedKnapsack.getNeighbours(currentPosition, currentWeight));
         }
         return neighbours;
     }
 
-    private double calculateProbabilities(int currentIndex, MyAbstractObjective objective, List<Integer> neighbours, double[] outProbabilities){
+//    public List<Integer> getNeighbours(int currentPosition, double currentWeight) {
+//        List<Integer> neighbours = new ArrayList<>();
+//
+//        for (int i = 0; i < nrOfNodes; i++) {
+//            if (i != currentPosition && currentWeight + weights[i] < capacity) {
+//                neighbours.add(i);
+//            }
+//        }
+//        return neighbours;
+//    }
+
+    private double calculateProbabilities(int currentIndex, MyAbstractObjective objective, List<NestedKnapsack.TableIndex> neighbours, double[] outProbabilities){
         double total = 0;
 
-        int neighbourIndex = 0;
+        NestedKnapsack.TableIndex neighbourIndex = null;
         for (int i = 0; i < neighbours.size(); i++) {
             double heuristics = 0;
 
             neighbourIndex = neighbours.get(i);
             for (MyAbstractObjective obj :
                     objectives) {
-                heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex)/weights[neighbourIndex], beta);
+                heuristics += Math.pow(obj.calculateHeuristic(neighbourIndex.index)/weights[neighbourIndex.index], beta);
             }
 
-            double p = Math.pow(objective.getPheromone(currentIndex, neighbourIndex), alpha);
+            double p = Math.pow(objective.getPheromone(currentIndex, neighbourIndex.index), alpha);
 
             outProbabilities[i] = heuristics * p;
 
@@ -132,7 +154,7 @@ public class Knapsack {
         return sumProbability;
     }
 
-    public int getNextItemRandomObjective(int currentPosition, List<Integer> neighbours) {
+    public NestedKnapsack.TableIndex getNextItemRandomObjective(int currentPosition, List<NestedKnapsack.TableIndex> neighbours) {
 
         int object = Math.random() < 0.5 ? 0 : 1; // ToDo: Only two objectives as of now
 
@@ -146,12 +168,33 @@ public class Knapsack {
         for (int i = 0; i < neighbours.size(); i++) {
             total += probabilities[i];
             if (total >= rand) {
-                return i;
+                return neighbours.get(i);
             }
         }
 
-        return -1;
+        return null;
     }
+
+//    public NestedKnapsack.TableIndex getNextItemRandomObjective(int currentPosition, List<NestedKnapsack.TableIndex> neighbours) {
+//
+//        int object = Math.random() < 0.5 ? 0 : 1; // ToDo: Only two objectives as of now
+//
+//        double[] probabilities = new double[neighbours.size()];
+//        double sumProbability = calculateProbabilities(currentPosition, objectives.get(object), neighbours, probabilities);
+//
+//        double rand = ThreadLocalRandom.current().nextDouble(sumProbability);
+//
+//        double total = 0;
+//
+//        for (int i = 0; i < neighbours.size(); i++) {
+//            total += probabilities[i];
+//            if (total >= rand) {
+//                return i;
+//            }
+//        }
+//
+//        return -1;
+//    }
 
 
 }

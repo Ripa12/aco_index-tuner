@@ -19,15 +19,20 @@ public class KnapsackSolution {
         inferior
     }
 
-    private static MyAbstractObjective[] objectives = null;
+    //private static MyAbstractObjective[] objectives = null;
     private double[] qualities;
     private List<Integer> solution;
 
-    KnapsackSolution(MyAbstractObjective[] objectives, int nrOfObj){
+//    KnapsackSolution(MyAbstractObjective[] objectives, int nrOfObj){
+//        this.solution = new ArrayList<>();
+//        this.qualities = new double[nrOfObj];
+//
+//        Knapsack.objectives = objectives;
+//    }
+
+    KnapsackSolution(int nrOfObj){
         this.solution = new ArrayList<>();
         this.qualities = new double[nrOfObj];
-
-        KnapsackSolution.objectives = objectives;
     }
 
     private KnapsackSolution(KnapsackSolution other){
@@ -37,10 +42,10 @@ public class KnapsackSolution {
 
     public static void updateBestQuality(KnapsackSolution other){
 
-        for(int obj = 0; obj < objectives.length; obj++){
-            if(objectives[obj].isBetter(other.qualities[obj])){
-                objectives[obj].setBestQuality(other.qualities[obj]);
-                objectives[obj].setBestSolution(ImmutableList.copyOf(other.solution)); // ToDo: Or simply a reference and not copy
+        for(int obj = 0; obj < Knapsack.objectives.size(); obj++){
+            if(Knapsack.objectives.get(obj).isBetter(other.qualities[obj])){
+                Knapsack.objectives.get(obj).setBestQuality(other.qualities[obj]);
+                Knapsack.objectives.get(obj).setBestSolution(ImmutableList.copyOf(other.solution)); // ToDo: Or simply a reference and not copy
             }
         }
     }
@@ -51,8 +56,8 @@ public class KnapsackSolution {
 
 
     public void incrementQuality(int position){
-        for (int i = 0; i < objectives.length; i++){
-            this.qualities[i] += objectives[i].getValue(position);
+        for (int i = 0; i < Knapsack.objectives.size(); i++){
+            this.qualities[i] += Knapsack.objectives.get(i).getValue(position);
         }
     }
 
@@ -70,12 +75,12 @@ public class KnapsackSolution {
 
         short domination = 0;
 
-        for(int i = 0; i < objectives.length; i++){
-            if(objectives[i].isBetter(qualities[i], other.qualities[i])){
+        for(int i = 0; i < Knapsack.objectives.size(); i++){
+            if(Knapsack.objectives.get(i).isBetter(qualities[i], other.qualities[i])){
                 domination++;
             }
         }
-        if(domination == objectives.length){
+        if(domination == Knapsack.objectives.size()){
             status = DominationStatus.superior;
         }
         else if(domination > 0){
